@@ -307,6 +307,8 @@
 import axios from "axios";
 import { onMounted, reactive, ref } from "vue";
 import * as Api from "../ApiHelper";
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
 // import { useRouter } from 'vue-router'
 
 export default {
@@ -352,6 +354,7 @@ export default {
           },
         })
         .then((response) => {
+          
           instrukturs.value = response.data.data;
           console.log(response);
         })
@@ -379,6 +382,7 @@ export default {
           }
         )
         .then((response) => {
+          toastr.success('Instruktur berhasil diupdate')
           getInstruktur();
           console.log(response);
         })
@@ -394,6 +398,7 @@ export default {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       }).then(() => {
+        toastr.success('Instruktur berhasil dihapus')
         getInstruktur();
       }).catch((error) => {
         console.log(error.response.data);

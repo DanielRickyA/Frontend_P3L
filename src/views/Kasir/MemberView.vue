@@ -295,7 +295,7 @@
           >
             Batal
           </button>
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deleteMember(member)">Delete</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deleteMember()">Delete</button>
         </div>
       </div>
     </div>
@@ -307,6 +307,8 @@
 import axios from "axios";
 import { onMounted, reactive, ref } from "vue";
 import * as Api from "../ApiHelper";
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
 // import { useRouter } from 'vue-router'
 
 export default {
@@ -377,6 +379,7 @@ export default {
         )
         .then((response) => {
           console.log(response);
+          toastr.success("Password berhasil direset");
         })
         .catch((error) => {
           console.log(error.response.data);
@@ -403,6 +406,7 @@ export default {
         )
         .then((response) => {
           GetMember();
+          toastr.success("Member berhasil diupdate");
           console.log(response);
         })
         .catch((error) => {
@@ -417,6 +421,7 @@ export default {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       }).then(() => {
+        toastr.success("Member berhasil dihapus");
         GetMember();
       }).catch((error) => {
         console.log(error.response.data);
@@ -431,6 +436,7 @@ export default {
       members,
       Api,
       member,
+      toastr,
       showData,
       resetPassword,
       OpenUpdateModal,

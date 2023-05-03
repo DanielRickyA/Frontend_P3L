@@ -121,6 +121,8 @@ import axios from "axios";
 import { onMounted, reactive, ref } from "vue";
 import * as Api from "../ApiHelper";
 import { useRouter } from "vue-router";
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
 
 export default {
   setup() {
@@ -208,8 +210,8 @@ export default {
             },
           }
         )
-        .then((response) => {
-          console.log(response);
+        .then(() => {
+          toastr.success('Jadwal berhasil ditambahkan')
           router.push({
             name: "indexJadwalView",
           });
@@ -231,6 +233,7 @@ export default {
       validation,
       kelas,
       instruktur,
+      toastr,
       createJadwal,
     };
   },

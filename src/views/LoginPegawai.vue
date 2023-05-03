@@ -37,7 +37,7 @@
             <div class="card-body px-4 py-5 px-md-5">
               <form class="form" @submit.prevent="loginPegawai">
                 <div>
-                  <p class="d-flex">LOGIN</p>
+                  <h4 class="mb-3 text-center">Login</h4>
                 </div>
 
                 <!-- <MDBRow tag="form" class="g-3">
@@ -80,7 +80,7 @@
                 </div> -->
 
                 <!-- Submit button -->
-                <button type="submit" class="btn btn-primary btn-block mb-4 mt-2">
+                <button type="submit" class="btn btn-primary btn-block mb-2 mt-3">
                   Sign up
                 </button>
               </form>
@@ -98,6 +98,9 @@ import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import * as Api from "./ApiHelper";
+// toastr
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
 export default {
   setup() {
     const Pegawai = reactive({
@@ -124,15 +127,19 @@ export default {
           console.log(result);
           let token = result.data.access_token;
           localStorage.setItem("token", token);
+          localStorage.setItem("role", result.data.user.role);
           if (result.data.user.role == "Admin") {
+            toastr.success('Berhasil Login Admin')
             router.push({
               name: "indexInstrukturView",
             });
           } else if (result.data.user.role == "Kasir") {
+            toastr.success('Berhasil Login Kasir')
             router.push({
               name: "indexMemberView",
             });
           } else if (result.data.user.role == "MO") {
+            toastr.success('Berhasil Login MO')
             router.push({
               name: "indexJadwalView",
             });
@@ -141,6 +148,7 @@ export default {
         .catch((error) => {
           //assign state validation with error
           console.log(error.response);
+          toastr.error(error.response.data.message)
           // validation.value = error.response.data.data;
         });
     }
@@ -150,6 +158,7 @@ export default {
       validation,
       router,
       loginPegawai,
+      toastr,
     };
   },
 };
@@ -197,7 +206,7 @@ section {
 }
 
 .bg-glass {
-  background-color: hsla(0, 0%, 100%, 0.9) !important;
+  background-color: hsla(0, 11%, 95%, 0.9) !important;
   backdrop-filter: saturate(200%) blur(25px);
 }
 </style>

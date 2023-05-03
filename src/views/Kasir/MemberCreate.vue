@@ -93,7 +93,8 @@ import axios from "axios";
 import { reactive, ref } from "vue";
 import * as Api from "../ApiHelper";
 import { useRouter } from "vue-router";
-
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
 export default {
   setup() {
     const member = reactive({
@@ -133,6 +134,7 @@ export default {
           }
         )
         .then((response) => {
+          toastr.success("Member berhasil ditambahkan");
           console.log(response);
           router.push({
             name: "indexMemberView",
@@ -147,6 +149,7 @@ export default {
     return {
       member,
       Api,
+      toastr,
       createMember,
       validation,
     };

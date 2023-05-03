@@ -107,6 +107,12 @@
             </tr>
 
             <tr>
+              <td>Nama Instruktur</td>
+              <td style="width: 20px">:</td>
+              <td>{{ jadwal.f_instruktur.nama }}</td>
+            </tr>
+
+            <tr>
               <td>Tanggal</td>
               <td>:</td>
               <td>{{ jadwal.tanggal }}</td>
@@ -304,6 +310,8 @@ import axios from "axios";
 import { onMounted, reactive, ref } from "vue";
 import * as Api from "../ApiHelper";
 // import { useRouter } from 'vue-router'
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
 
 export default {
   setup() {
@@ -427,6 +435,7 @@ export default {
           }
         )
         .then((response) => {
+          toastr.success('Jadwal Berhasil Diubah')
           getJadwalUmum();
           console.log(response);
         })
@@ -442,6 +451,7 @@ export default {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       }).then((response) => {
+        toastr.success('Jadwal Berhasil Dihapus')
         getJadwalUmum();
         console.log(response);
       }).catch((error) => {
@@ -463,6 +473,7 @@ export default {
       Api,
       kelas,
       instruktur,
+      toastr,
       showData,
       OpenUpdateModal,
       openDeleteModal,

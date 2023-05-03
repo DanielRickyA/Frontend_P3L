@@ -124,6 +124,8 @@ import axios from "axios";
 import { reactive, ref } from "vue";
 import * as Api from "../ApiHelper";
 import { useRouter } from "vue-router";
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
 
 export default {
   setup() {
@@ -180,6 +182,7 @@ export default {
     return {
       instruktur,
       Api,
+      toastr,
       createInstruktur,
       validation,
     };
