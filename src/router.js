@@ -49,6 +49,16 @@ const routes = [
         name: "createJadwalView",
         component: () => import("@/views/MO/JadwalCreate.vue"),
       },
+      {
+        path: "/JadwalHarianView.index",
+        name: "indexJadwalHarianView",
+        component: () => import("@/views/MO/JadwalHarianView.vue"),
+      },
+      {
+        path: "/PerizinanView.index",
+        name: "indexPerizinanView",
+        component: () => import("@/views/MO/PerizinanInstrukturView.vue"),
+      },
     ],
   },
 
@@ -68,9 +78,34 @@ const routes = [
         name: "createMemberView",
         component: () => import("@/views/Kasir/MemberCreate.vue"),
       },
+      {
+        path: "/AktivasiView.index",
+        name: "AktivasiView",
+        component: () => import("@/views/Kasir/TransaksiView.vue"),
+      },
+      {
+        path: "/TransaksiDeposit.index",
+        name: "DepoView",
+        component: () => import("@/views/Kasir/TransaksiDepoView.vue"),
+      },
+      {
+        path: "/TransaksiDepositUang.index",
+        name: "DepoUangView",
+        component: () => import("@/views/Kasir/TransaksiDepoUang.vue"),
+      },
+      {
+        path: "/TransaksiDepositKelas.index",
+        name: "DepoKelasView",
+        component: () => import("@/views/Kasir/TransaksiDepoKelas.vue"),
+      },
+      {
+        path: "/StrukTransaksi.index",
+        name: "StrukTransaksiView",
+        component: () => import("@/views/Kasir/StrukTransaksi.vue"),
+      },
     ],
   },
-  
+
   {
     // sidebar untuk admin
     path: "/",
@@ -78,12 +113,12 @@ const routes = [
     component: () => import("@/components/SidebarAdmin.vue"),
     children: [
       {
-        path: "/InstruktuView.index",
+        path: "/InstrukturView.index",
         name: "indexInstrukturView",
         component: () => import("@/views/Admin/InstrukturView.vue"),
       },
       {
-        path: "/InstruktuCreate.index",
+        path: "/InstrukturCreate.index",
         name: "createInstrukturView",
         component: () => import("@/views/Admin/InstrukturCreate.vue"),
       },

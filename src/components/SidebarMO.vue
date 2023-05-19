@@ -24,8 +24,15 @@
               ><span class="fa-solid fa-calendar-days mr-3"></span> Jadwal
             </router-link>
           </li>
-          <li>
-            <a href="#"><span class="fa fa-home mr-3"></span> About</a>
+          <li class="active">
+            <router-link :to="{ name: 'indexJadwalHarianView' }"
+              ><span class="fa-solid fa-calendar-plus mr-3"></span> Jadwal Harian
+            </router-link>
+          </li>
+          <li class="active">
+            <router-link :to="{ name: 'indexPerizinanView' }"
+              ><span class="fa-solid fa-envelope mr-3"></span> Perizinan Instruktur
+            </router-link>
           </li>
           <li>
             <a href="#"><span class="fa fa-briefcase mr-3"></span> Works</a>
@@ -46,7 +53,7 @@
           </li>
         </ul>
 
-          <form action="#" class="subscribe-form" @submit.prevent="logout">
+          <form action="#" class="subscribe-form" @submit.prevent="logout1">
             <div class="form-group d-flex justify-content-center">
               <!-- <RouterLink :to="{ name: 'Login' }"> -->
                 <button
@@ -402,13 +409,18 @@ a[data-toggle="collapse"] {
 import { RouterLink } from "vue-router";
 import axios from "axios";
 import * as Api from "../views/ApiHelper";
+import { onMounted } from "vue";
 
 export default {
-  methods: {
-    toggleSidebar() {
-      this.$refs.sidebar.classList.toggle("active");
-    },
-    logout() {
+
+  setup() {
+    onMounted(() => {
+      if (localStorage.getItem("role") != "MO") {
+        logout();
+      }
+    });
+
+    function logout() {
       axios
         .post(
           Api.BASE_URL + "/LogoutPegawai",
@@ -422,13 +434,50 @@ export default {
         )
         .then(() => {
           localStorage.removeItem("token");
+          localStorage.removeItem("role");
+          localStorage.removeItem("id");
+          // window.location.href = "/";
+          window.location.href = "/";
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  },
+  methods: {
+    toggleSidebar() {
+      this.$refs.sidebar.classList.toggle("active");
+    },
+    
+     logout1() {
+      axios
+        .post(
+          Api.BASE_URL + "/LogoutPegawai",
+          {},
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        )
+        .then(() => {
+          localStorage.removeItem("token");
+          localStorage.removeItem("role");
+          localStorage.removeItem("id");
+          // window.location.href = "/";
           this.$router.push("/");
         })
         .catch((error) => {
           console.log(error);
         });
-    },
+    }
+    
   },
   components: { RouterLink },
+
+  return:{
+    onMounted,
+  }
 };
 </script>

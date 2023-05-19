@@ -402,8 +402,41 @@ a[data-toggle="collapse"] {
 import { RouterLink } from "vue-router";
 import axios from "axios";
 import * as Api from "../views/ApiHelper";
+import { onMounted } from "vue";
 
 export default {
+  setup() {
+    onMounted(() => {
+      if (localStorage.getItem("role") != "Admin") {
+        logout();
+      }
+    });
+
+    function logout() {
+      axios
+        .post(
+          Api.BASE_URL + "/LogoutPegawai",
+          {},
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        )
+        .then(() => {
+          console.log("logout");
+          localStorage.removeItem("token");
+          localStorage.removeItem("role");
+          localStorage.removeItem("id");
+          window.location.href = "/";
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  },
+  
   methods: {
     toggleSidebar() {
       this.$refs.sidebar.classList.toggle("active");
@@ -423,13 +456,22 @@ export default {
         .then(() => {
           console.log("logout");
           localStorage.removeItem("token");
+          localStorage.removeItem("role");
+          localStorage.removeItem("id");
           this.$router.push("/");
         })
         .catch((error) => {
           console.log(error);
         });
-    },
+    }
+
+    
   },
+  
   components: { RouterLink },
+
+  return :{
+    onMounted,
+  },
 };
 </script>

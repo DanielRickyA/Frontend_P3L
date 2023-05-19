@@ -57,7 +57,7 @@
                   class="form-control"
                   type="text"
                   v-model="member.alamat"
-                  placeholder="Masukkan jumlah pegawai"
+                  placeholder="Masukkan Alamat"
                   required
                 />
                 <!-- validation -->
@@ -71,7 +71,7 @@
                   class="form-control"
                   type="text"
                   v-model="member.no_telp"
-                  placeholder="Masukkan jumlah pegawai"
+                  placeholder="Masukkan No. Telp"
                   required
                 />
                 <!-- validation -->
@@ -93,8 +93,8 @@ import axios from "axios";
 import { reactive, ref } from "vue";
 import * as Api from "../ApiHelper";
 import { useRouter } from "vue-router";
-import toastr from 'toastr'
-import 'toastr/build/toastr.min.css'
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";
 export default {
   setup() {
     const member = reactive({
@@ -142,7 +142,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          validation.value = error.response.data;
+          validation.value = error.response.data.message;
         });
     }
 
@@ -177,8 +177,6 @@ export default {
     );
   color: #fff;
 }
-
-
 
 .form-label {
   color: black;

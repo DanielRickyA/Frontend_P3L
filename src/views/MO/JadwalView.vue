@@ -19,33 +19,20 @@
             <table class="table table-striped table-bordered mt4">
               <thead class="thead-dark">
                 <tr class="text-dark table-secondary">
-                  <th scope="col">ID Jadwal</th>
                   <th scope="col">Nama Kelas</th>
                   <th scope="col">Nama Instruktur</th>
-                  <th scope="col">Tanggal</th>
+                  <th scope="col">Hari</th>
                   <th scope="col">Jam</th>
                   <th scope="col">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(jadwal, id) in jadwals" :key="id">
-                  <td>{{ jadwal.id }}</td>
                   <td>{{ jadwal.f_kelas.nama }}</td>
                   <td>{{ jadwal.f_instruktur.nama }}</td>
-                  <td>{{ jadwal.tanggal}}</td>
+                  <td>{{ jadwal.hari_kelas}}</td>
                   <td>{{ jadwal.jam_kelas }}</td>
                   <td class="text-center">
-                    <!-- Btn ShowByID -->
-                    <button
-                      class="btn btn-sm btn-primary me-1"
-                      data-bs-toggle="modal"
-                      @click="showData(jadwal)"
-                      data-bs-target="#ShowIDMemberModal"
-                    >
-                      <i class="fa-solid fa-eye"></i>
-                    </button>
-                    <!--  -->
-
                     <!-- Btn Update -->
                     <button
                       class="btn btn-sm btn-success me-1"
@@ -77,63 +64,6 @@
     </div>
   </div>
 
-   <!-- Modal ShowByID -->
-  <div
-    class="modal fade"
-    id="ShowIDMemberModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog ">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">
-            Jadwal Tanggal {{ jadwal.tanggal }}
-          </h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body text-start">
-          <table id="tableMember">
-            <tr>
-              <td>Nama Kelas</td>
-              <td style="width: 20px">:</td>
-              <td>{{ jadwal.f_kelas.nama }}</td>
-            </tr>
-
-            <tr>
-              <td>Nama Instruktur</td>
-              <td style="width: 20px">:</td>
-              <td>{{ jadwal.f_instruktur.nama }}</td>
-            </tr>
-
-            <tr>
-              <td>Tanggal</td>
-              <td>:</td>
-              <td>{{ jadwal.tanggal }}</td>
-            </tr>
-            <tr>
-              <td>Status</td>
-              <td>:</td>
-              <td>{{ jadwal.hari_kelas }}</td>
-            </tr>
-            <tr>
-              <td>Tanggal Expired</td>
-              <td>:</td>
-              <td>{{ jadwal.jam_kelas }}</td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!--  -->
-
   <!-- Update Modal -->
    <div
     class="modal fade"
@@ -146,7 +76,7 @@
       <form @submit.prevent="updateJadwal" class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">
-            Update Jadwal Kelas tanggal {{ jadwal.tanggal }}
+            Update Kelas {{ jadwal.f_kelas.nama }} | Insturktur {{ jadwal.f_instruktur.nama }}
           </h1>
           <button
             type="button"
@@ -203,19 +133,6 @@
                   {{ validation.tanggal_lahir[0] }}
                 </div> -->
               </div>
-              <div class="form-group mb-3">
-                <label for="content" class="form-label">Tanggal Kelas</label>
-                <input
-                  class="form-control"
-                  type="date"
-                  v-model="jadwal.tanggal"
-                  required
-                />
-                <!-- validation -->
-                <!-- <div v-if="validation.alamat" class="mt-2 alert alert-danger">
-                  {{ validation.alamat[0] }}
-                </div> -->
-              </div>
 
               <div class="form-group mb-3">
                 <label for="content" class="form-label">Hari Kelas</label>
@@ -237,7 +154,7 @@
                   class="form-control"
                   type="text"
                   v-model="jadwal.jam_kelas"
-                  placeholder="Masukkan jumlah pegawai"
+                  placeholder="Masukkan Jam Kelas"
                   required
                 />
                 <!-- validation -->
@@ -273,12 +190,13 @@
     tabindex="-1"
     aria-labelledby="staticBackdropLabel"
     aria-hidden="true"
+    
   >
     <div class="modal-dialog modal-sm modal-dialog-centered">
       <div class="modal-content ">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="staticBackdropLabel">
-            Delete Kelas {{ jadwal.f_kelas.nama }} tanggal {{ jadwal.id }}
+            Delete {{ jadwal.f_kelas.nama }} || {{ jadwal.f_instruktur.nama }}
           </h1>
           <button
             type="button"
@@ -314,6 +232,10 @@ import toastr from 'toastr'
 import 'toastr/build/toastr.min.css'
 
 export default {
+
+  methods:{
+   
+  },
   setup() {
 
     const kelas = ref([]);
@@ -324,7 +246,6 @@ export default {
       id: "",
       id_kelas: "",
       id_instruktur: "",
-      tanggal: "",
       hari_kelas: "",
       jam_kelas: "",
       f_kelas: {
@@ -338,7 +259,6 @@ export default {
     // let router = useRouter()
     function showData(jadwalObj) {
       jadwal.id = jadwalObj.id;
-      jadwal.tanggal = jadwalObj.tanggal;
       jadwal.hari_kelas = jadwalObj.hari_kelas;
       jadwal.jam_kelas = jadwalObj.jam_kelas;
       jadwal.f_kelas.nama = jadwalObj.f_kelas.nama;
@@ -348,14 +268,17 @@ export default {
     function OpenUpdateModal(jadwalObj) {
       jadwal.id = jadwalObj.id;
       jadwal.id_kelas = jadwalObj.id_kelas;
-      jadwal.tanggal = jadwalObj.tanggal;
       jadwal.id_instruktur = jadwalObj.id_instruktur;
       jadwal.hari_kelas = jadwalObj.hari_kelas;
       jadwal.jam_kelas = jadwalObj.jam_kelas;
+      jadwal.f_kelas.nama = jadwalObj.f_kelas.nama;
+      jadwal.f_instruktur.nama = jadwalObj.f_instruktur.nama;
     }
 
     function openDeleteModal(jadwalObj) {
       jadwal.id = jadwalObj.id;
+      jadwal.f_kelas.nama = jadwalObj.f_kelas.nama;
+      jadwal.f_instruktur.nama = jadwalObj.f_instruktur.nama;
     }
 
     // Get Jadwal UMUM 
@@ -465,6 +388,7 @@ export default {
         getKelas();
         getInstruktur();  
       });
+      
     
 
     return {

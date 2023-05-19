@@ -47,8 +47,8 @@
                     aria-describedby="search-addon" aria-label="Search" placeholder="Search"/>
                 </MDBRow> -->
 
-                <!-- Email input -->
-                <div class="form-floating mb-3">
+                <!-- Nama input -->
+                <div class="form-floating mb-2">
                   <input
                     type="text"
                     class="form-control"
@@ -58,6 +58,14 @@
                   />
                   <label for="floatingInput">Nama Pegawai</label>
                 </div>
+                <div
+                  v-if="validation.nama"
+                  class="mt-2 alert alert-danger py-2 small"
+                >
+                  {{ validation.nama[0] }}
+                </div>
+                
+                <!-- Password -->
                 <div class="form-floating">
                   <input
                     type="password"
@@ -67,6 +75,12 @@
                     v-model="Pegawai.password"
                   />
                   <label for="floatingPassword">Password</label>
+                </div>
+                <div
+                  v-if="validation.password"
+                  class="mt-2 alert alert-danger py-2 small"
+                >
+                  {{ validation.password[0] }}
                 </div>
 
                 <!-- <div class="form-outline" bis_skin_checked="1">
@@ -128,6 +142,7 @@ export default {
           let token = result.data.access_token;
           localStorage.setItem("token", token);
           localStorage.setItem("role", result.data.user.role);
+          localStorage.setItem("id", result.data.user.id);
           if (result.data.user.role == "Admin") {
             toastr.success('Berhasil Login Admin')
             router.push({
@@ -148,8 +163,10 @@ export default {
         .catch((error) => {
           //assign state validation with error
           console.log(error.response);
-          toastr.error(error.response.data.message)
-          // validation.value = error.response.data.data;
+          validation.value = error.response.data.message;
+          if(validation.value == "Invalid Credentials"){
+            toastr.error(validation.value);
+          }
         });
     }
 
@@ -157,8 +174,8 @@ export default {
       Pegawai,
       validation,
       router,
-      loginPegawai,
       toastr,
+      loginPegawai,
     };
   },
 };

@@ -19,22 +19,30 @@
           >
         </h1>
         <ul class="list-unstyled components mb-5">
-          <li class="active">
+          <li >
             <router-link :to="{ name: 'indexMemberView' }"
               ><span class="fa fa-user mr-3"></span> Member
             </router-link>
           </li>
-          <li>
-            <a href="#"><span class="fa fa-home mr-3"></span> About</a>
+          <li >
+            <router-link :to="{ name: 'DepoView' }"
+              ><span class="fa-solid fa-dumbbell mr-3"></span> Transaksi Deposit
+            </router-link>
           </li>
-          <li>
-            <a href="#"><span class="fa fa-briefcase mr-3"></span> Works</a>
+          <li >
+            <router-link :to="{ name: 'AktivasiView' }"
+              ><span class="fa-solid fa-star mr-3"></span> Transaksi Aktivasi
+            </router-link>
           </li>
-          <li>
-            <a href="#"><span class="fa fa-sticky-note mr-3"></span> Blog</a>
+          <li >
+            <router-link :to="{ name: 'DepoUangView' }"
+              ><span class="fa-solid fa-wallet mr-3"></span> Transaksi Deposit Uang
+            </router-link>
           </li>
-          <li>
-            <a href="#"><span class="fa fa-suitcase mr-3"></span> Gallery</a>
+          <li >
+            <router-link :to="{ name: 'DepoKelasView' }"
+              ><span class="fa-solid fa-calendar-check mr-3"></span> Transaksi Deposit Kelas
+            </router-link>
           </li>
           <li>
             <a href="#"><span class="fa fa-cogs mr-3"></span> Services</a>
@@ -46,7 +54,7 @@
           </li>
         </ul>
 
-         <form action="#" class="subscribe-form" @submit.prevent="logout">
+         <form action="#" class="subscribe-form" @submit.prevent="logout1">
             <div class="form-group d-flex justify-content-center">
               <!-- <RouterLink :to="{ name: 'Login' }"> -->
                 <button
@@ -402,13 +410,18 @@ a[data-toggle="collapse"] {
 import { RouterLink } from "vue-router";
 import axios from "axios";
 import * as Api from "../views/ApiHelper";
+import { onMounted } from "vue";
 
 export default {
-  methods: {
-    toggleSidebar() {
-      this.$refs.sidebar.classList.toggle("active");
-    },
-    logout() {
+
+  setup() {
+    onMounted(() => {
+      if (localStorage.getItem("role") != "Kasir") {
+        logout();
+      }
+    });
+
+     function logout() {
       axios
         .post(
           Api.BASE_URL + "/LogoutPegawai",
@@ -422,13 +435,50 @@ export default {
         )
         .then(() => {
           localStorage.removeItem("token");
+          localStorage.removeItem("role");
+          localStorage.removeItem("id");
+          window.location.href = "/";
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+  },
+
+  methods: {
+    toggleSidebar() {
+      this.$refs.sidebar.classList.toggle("active");
+    },
+
+    logout1() {
+      axios
+        .post(
+          Api.BASE_URL + "/LogoutPegawai",
+          {},
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        )
+        .then(() => {
+          localStorage.removeItem("token");
+          localStorage.removeItem("role");
+          localStorage.removeItem("id");
           this.$router.push("/");
         })
         .catch((error) => {
           console.log(error);
         });
-    },
+    }
+   
   },
   components: { RouterLink },
+
+  return:{
+    onMounted,
+  }
 };
 </script>

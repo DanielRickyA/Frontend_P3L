@@ -36,15 +36,15 @@
                   </option>
                 </select>
                 <!-- validation -->
-                <!-- <div v-if="validation.nama" class="mt-2 alert alert-danger">
-                  {{ validation.nama[0] }}
-                </div> -->
+                <div v-if="validation.nama" class="mt-2 alert alert-danger">
+                  {{ validation.f_kelas.nama[0] }}
+                </div>
               </div>
               <div class="form-group mb-3">
-                <label for="content" class="form-label">Tanggal Lahir</label>
+                <label for="content" class="form-label">Nama Instruktur</label>
                 <select
                   class="form-control"
-                  placeholder="Masukkan nama member"
+                  placeholder="Masukkan nama Instruktur"
                   v-model="jadwal.id_instruktur"
                   required
                 >
@@ -57,26 +57,12 @@
                   </option>
                 </select>
                 <!-- validation -->
-                <!-- <div
+                <div
                   v-if="validation.tanggal_lahir"
                   class="mt-2 alert alert-danger"
                 >
-                  {{ validation.tanggal_lahir[0] }}
-                </div> -->
-              </div>
-              <div class="form-group mb-3">
-                <label for="content" class="form-label">Tanggal Kelas</label>
-                <input
-                  class="form-control"
-                  type="date"
-                  v-model="jadwal.tanggal"
-                  placeholder="Masukkan jumlah pegawai"
-                  required
-                />
-                <!-- validation -->
-                <!-- <div v-if="validation.alamat" class="mt-2 alert alert-danger">
-                  {{ validation.alamat[0] }}
-                </div> -->
+                  {{ validation[0] }}
+                </div>
               </div>
 
               <div class="form-group mb-3">
@@ -85,13 +71,13 @@
                   class="form-control"
                   type="text"
                   v-model="jadwal.hari_kelas"
-                  placeholder="Masukkan jumlah pegawai"
+                  placeholder="Masukkan Hari Kelas"
                   required
                 />
                 <!-- validation -->
-                <!-- <div v-if="validation.alamat" class="mt-2 alert alert-danger">
-                  {{ validation.alamat[0] }}
-                </div> -->
+                <div v-if="validation.alamat" class="mt-2 alert alert-danger">
+                  {{ validation.hari_kelas[0] }}
+                </div>
               </div>
               <div class="form-group mb-3">
                 <label for="content" class="form-label">Jam Kelas</label>
@@ -99,13 +85,13 @@
                   class="form-control"
                   type="text"
                   v-model="jadwal.jam_kelas"
-                  placeholder="Masukkan jumlah pegawai"
+                  placeholder="Masukkan Jam Kelas"
                   required
                 />
                 <!-- validation -->
-                <!-- <div v-if="validation.no_telp" class="mt-2 alert alert-danger">
-                  {{ validation.no_telp[0] }}
-                </div> -->
+                <div v-if="validation.no_telp" class="mt-2 alert alert-danger">
+                  {{ validation.jam_kelas[0] }}
+                </div>
               </div>
               <button type="submit" class="btn btn-primary">SIMPAN</button>
             </form>
@@ -121,8 +107,8 @@ import axios from "axios";
 import { onMounted, reactive, ref } from "vue";
 import * as Api from "../ApiHelper";
 import { useRouter } from "vue-router";
-import toastr from 'toastr'
-import 'toastr/build/toastr.min.css'
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";
 
 export default {
   setup() {
@@ -140,6 +126,7 @@ export default {
         nama: "",
       },
     });
+    
 
     const kelas = ref([]);
     const instruktur = ref([]);
@@ -182,16 +169,10 @@ export default {
     }
 
     function createJadwal() {
-      const date = new Date(jadwal.tanggal);
-      const year = date.getFullYear();
-      const month = ("0" + (date.getMonth() + 1)).slice(-2);
-      const day = ("0" + date.getDate()).slice(-2);
-
       let id_kelas = jadwal.id_kelas;
       let id_instruktur = jadwal.id_instruktur;
-      let tanggal = `${year}-${month}-${day}`;
       let hari_kelas = jadwal.hari_kelas;
-      let jam_kelas =  jadwal.jam_kelas;
+      let jam_kelas = jadwal.jam_kelas;
 
       axios
         .post(
@@ -199,7 +180,6 @@ export default {
           {
             id_kelas: id_kelas,
             id_instruktur: id_instruktur,
-            tanggal: tanggal,
             hari_kelas: hari_kelas,
             jam_kelas: jam_kelas,
           },
@@ -211,17 +191,18 @@ export default {
           }
         )
         .then(() => {
-          toastr.success('Jadwal berhasil ditambahkan')
+          toastr.success("Jadwal berhasil ditambahkan");
           router.push({
             name: "indexJadwalView",
           });
         })
         .catch((error) => {
           console.log(error);
-          validation.value = error.response.data;
+          validation.value = error.response.data.message;
+          toastr.error(error.response.data.message);
         });
     }
-
+  
     onMounted(() => {
       getKelas();
       getInstruktur();

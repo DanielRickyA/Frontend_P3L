@@ -1,7 +1,11 @@
+<style>
+@import "datatables.net-dt";
+/* @import 'datatables.net-bs5'; */
+</style>
+
 <template>
   <div
-    class="d-flex justify-content-between flex-wrap flex-mdnowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
-  >
+    class="d-flex justify-content-between flex-wrap flex-mdnowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">KASIR</h1>
     <router-link
       :to="{ name: 'createMemberView' }"
@@ -15,62 +19,94 @@
       <div class="col-md-12">
         <div class="card border-0 rounded shadow">
           <div class="card-body">
-            <h3 style="text-align: left">Data Member</h3>
-            <table class="table table-striped table-bordered mt4">
-              <thead class="thead-dark">
-                <tr class="text-dark table-secondary">
-                  <th scope="col">ID Member</th>
-                  <th scope="col">Nama Member</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Tanggal Expired</th>
-                  <th scope="col">Jumlah Deposit</th>
-                  <th scope="col">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(member, id) in members" :key="id">
-                  <td>{{ member.id }}</td>
-                  <td>{{ member.nama }}</td>
-                  <td>{{ member.status }}</td>
-                  <td>{{ member.tanggal_expired || "—————" }}</td>
-                  <td>{{ member.deposit_uang || "—————" }}</td>
-                  <td class="text-center">
-                    <!-- Btn ShowByID -->
-                    <button
-                      class="btn btn-sm btn-primary me-1"
-                      data-bs-toggle="modal"
-                      @click="showData(member)"
-                      data-bs-target="#ShowIDMemberModal"
-                    >
-                      <i class="fa-solid fa-eye"></i>
-                    </button>
-                    <!--  -->
+            <div class="d-flex align-item-center justify-content-between mb-3">
+              <h3 class="mb-0">Data Members</h3>
+              <div class="d-flex">
+                <input
+                  type="search"
+                  class="form-control"
+                  placeholder="search"
+                  v-model="search"
+                />
+              </div>
+            </div>
+            <EasyDataTable
+              :items="members"
+              :headers="headers"
+              :search-value="search"
+            >
+             <!-- <template #item-status="member">
+              <div v-if="member.status == 'Active'">
+                <span class="badge fs-6 bg-success">Active</span>
+              </div>
+              <div v-if="member.status == 'Inactive'">
+                <span class="badge fs-6 bg-danger">Inactive</span>
+              </div>
+            </template> -->
 
-                    <!-- Btn Update -->
-                    <button
-                      class="btn btn-sm btn-success me-1"
-                      data-bs-toggle="modal"
-                      @click="OpenUpdateModal(member)"
-                      data-bs-target="#UpdateModal"
-                    >
-                      <i class="fa-solid fa-pencil"></i>
-                    </button>
-                    <!--  -->
+            <template #item-tanggal_expired="member">
+              <div v-if="member.tanggal_expired == null">
+                <span class=" ">———————</span>
+              </div>
+              <div v-else>
+                <span class=" ">{{ member.tanggal_expired }}</span>
+              </div>
+            </template>
+              <template #item-actions="member">
+                <!-- Btn ShowByID -->
+                <button
+                  class="btn btn-sm btn-primary me-1"
+                  data-bs-toggle="modal"
+                  @click="showData(member)"
+                  data-bs-target="#ShowIDMemberModal"
+                >
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+                <!--  -->
 
-                    <!-- Btn Delete -->
-                    <button
-                      class="btn btn-sm btn-danger me-1"
-                      data-bs-toggle="modal"
-                      data-bs-target="#DeleteModal"
-                      @click="openDeleteModal(member)"
-                    >
-                      <i class="fa-solid fa-trash"></i>
-                    </button>
-                    <!--  -->
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                <!-- Btn Update -->
+                <button
+                  class="btn btn-sm btn-success me-1"
+                  data-bs-toggle="modal"
+                  @click="OpenUpdateModal(member)"
+                  data-bs-target="#UpdateModal"
+                >
+                  <i class="fa-solid fa-pencil"></i>
+                </button>
+                <!--  -->
+
+                <!-- Btn Delete -->
+                <button
+                  class="btn btn-sm btn-danger me-1"
+                  data-bs-toggle="modal"
+                  data-bs-target="#DeleteModal"
+                  @click="openDeleteModal(member)"
+                >
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+
+                
+                <button
+                  v-if="member.status == 'Inactive'"
+                  class="btn btn-sm btn-warning me-1"
+                  data-bs-toggle="modal"
+                  data-bs-target="#setAktifModal"
+                  @click="setAktivasi(member)"
+                >
+                  <i class="fa-solid fa-star"></i>
+                </button>
+                <button
+                  v-if="member.status == 'Active'"
+                  class="btn btn-sm btn-dark me-1"
+                  data-bs-toggle="modal"
+                  data-bs-target="#setDeaktifModal"
+                  @click="setDeaktivasi(member)"
+                >
+                  <i class="fa-solid fa-star"></i>
+                </button>
+                <!--  -->
+              </template>
+            </EasyDataTable>
           </div>
         </div>
       </div>
@@ -128,7 +164,7 @@
             <tr>
               <td>Jumlah Deposit</td>
               <td>:</td>
-              <td>{{ member.deposit_uang || "—"}}</td>
+              <td>{{ member.deposit_uang || "—" }}</td>
             </tr>
           </table>
         </div>
@@ -191,7 +227,6 @@
                 class="form-control"
                 type="date"
                 v-model="member.tanggal_lahir"
-                placeholder="Masukkan nama manager"
                 required
               />
               <!-- validation -->
@@ -208,7 +243,7 @@
                 class="form-control"
                 type="text"
                 v-model="member.alamat"
-                placeholder="Masukkan jumlah pegawai"
+                placeholder="Masukkan Alamat"
                 required
               />
               <!-- validation -->
@@ -222,7 +257,7 @@
                 class="form-control"
                 type="text"
                 v-model="member.no_telp"
-                placeholder="Masukkan jumlah pegawai"
+                placeholder="Masukkan No. Telp"
                 required
               />
               <!-- validation -->
@@ -237,7 +272,7 @@
                 class="form-control"
                 type="password"
                 v-model="member.password"
-                placeholder="Masukkan jumlah pegawai"
+                placeholder="Jika Tidak Ingin Mengganti Password, Kosongkan Saja"
               />
               <!-- validation -->
               <!-- <div v-if="validation.no_telp" class="mt-2 alert alert-danger">
@@ -274,7 +309,7 @@
     aria-hidden="true"
   >
     <div class="modal-dialog modal-sm modal-dialog-centered">
-      <div class="modal-content ">
+      <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="staticBackdropLabel">
             Delete {{ member.id }}
@@ -291,27 +326,205 @@
             type="button"
             class="btn"
             data-bs-dismiss="modal"
-            style="color:white; background-color: #e8b5b5;"
+            style="color: white; background-color: #e8b5b5"
           >
             Batal
           </button>
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deleteMember()">Delete</button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            data-bs-dismiss="modal"
+            @click="deleteMember()"
+          >
+            Delete
+          </button>
         </div>
       </div>
     </div>
   </div>
   <!--  -->
+
+  <!-- Modal Untuk Pemilihan Aktivasi -->
+  <div
+    class="modal fade"
+    id="setAktifModal"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">
+            Aktivasi Member {{ member.id }}
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-footer border-0">
+          <button
+            type="button"
+            class="btn"
+            data-bs-dismiss="modal"
+            
+          >
+            Batal
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-dismiss="modal"
+            data-bs-target="#setAktivasiMember"
+            data-bs-toggle="modal"
+            @click="setAktivasi(member)"
+          >
+            Aktivasi
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  -->
+
+  <!-- Modal Aktivasi  -->
+  <div
+    class="modal fade"
+    id="setAktivasiMember"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <form @submit.prevent="setAktivasiMember" class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">
+            Aktivasi Member
+          </h1>
+          <button
+            type="button"
+            class="btn-close btn-secondary"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group mb-3">
+            <label class="form-label" bis_skin_checked="1">ID Member</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Masukkan nama member"
+              v-model="member.id"
+              required
+              disabled
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" bis_skin_checked="1"
+              >Jumlah Pembayaran</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              placeholder="Masukkan Jumlah Pembayaran"
+              min="3000000"
+              v-model="aktivasi.jumlah_bayar"
+              required
+            />
+          </div>
+          <!-- make drop down -->
+          <div class="form-group mt-2">
+            <label for="validationCustom04" class="form-label">Metode Pembayaran</label>
+            <select class="form-select" id="validationCustom04" v-model="aktivasi.jenis_pembayaran" required>
+              <option selected disabled value="">Pilih Metode Pembayaran</option>
+              <option value="Cash">Cash</option>
+              <option value="Debit">Debit</option>
+              <option value="Transfer">Transfer</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!--  -->
+  <!-- Modal Deaktivasi -->
+  <!-- Modal Untuk Pemilihan Aktivasi -->
+  <div
+    class="modal fade"
+    id="setDeaktifModal"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <form @submit.prevent="setDeaktivasiMember" class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">
+            Deaktivasi Member
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary">Deaktivasi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!--  -->
+
 </template>
 
 <script>
 import axios from "axios";
 import { onMounted, reactive, ref } from "vue";
 import * as Api from "../ApiHelper";
-import toastr from 'toastr'
-import 'toastr/build/toastr.min.css'
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";
+import Vue3EasyDataTable from "vue3-easy-data-table";
+import bootstrapMin from "bootstrap/dist/js/bootstrap.min";
+
+
+// DataTable.use(DataTablesCore);
+
 // import { useRouter } from 'vue-router'
 
 export default {
+  // memakai component DataTables, caranya:
+  components: {
+    EasyDataTable: Vue3EasyDataTable,
+  },
   setup() {
     let members = ref([]);
     let member = reactive({
@@ -325,6 +538,27 @@ export default {
       deposit_uang: "",
       password: "",
     });
+
+    let aktivasi = reactive({
+      id: "",
+      id_member: "",
+      id_pegawai: "",
+      tanggal_transaksi: "",
+      jumlah_bayar: "",
+      jenis_pembayaran: "",
+    });
+
+    let headers = ref([
+      { text: "ID Member", value: "id", sortable: true },
+      { text: "Nama Member", value: "nama", sortable: true },
+      { text: "Status", value: "status", sortable: true },
+      { text: "Tanggal Expired", value: "tanggal_expired", sortable: true },
+      { text: "jumlah Deposit", value: "deposit_uang", sortable: true },
+      { text: "Actions", value: "actions" },
+    ]);
+
+    let search = ref("");
+
     // let router = useRouter()
     function showData(memberObj) {
       member.id = memberObj.id;
@@ -348,6 +582,20 @@ export default {
     function openDeleteModal(memberObj) {
       member.id = memberObj.id;
     }
+
+    function setAktivasi(memberObj) {
+      member.id = memberObj.id;
+
+      aktivasi.jumlah_bayar = "";
+      aktivasi.jenis_pembayaran = "";
+    }
+
+    function setDeaktivasi(memberObj) {
+      member.id = memberObj.id;
+    }
+
+    
+
     function GetMember() {
       axios
         .get(Api.BASE_URL + "/Member", {
@@ -414,41 +662,94 @@ export default {
         });
     }
 
-    function deleteMember(){
-        axios.delete(Api.BASE_URL + "/Member/" + member.id, {
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      }).then(() => {
-        toastr.success("Member berhasil dihapus");
+    function deleteMember() {
+      axios
+        .delete(Api.BASE_URL + "/Member/" + member.id, {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then(() => {
+          toastr.success("Member berhasil dihapus");
+          GetMember();
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        });
+    }
+
+    function setAktivasiMember() {
+      axios.post(Api.BASE_URL + "/TransaksiAktivasi",
+      {
+        id_member: member.id,
+        id_pegawai: localStorage.getItem("id"),
+        jumlah_bayar: aktivasi.jumlah_bayar,
+        jenis_pembayaran: aktivasi.jenis_pembayaran,
+      },{
+         headers: {
+              Accept: "application/json",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+      }).then((response) => {
+        console.log(response);
+        let modal = document.getElementById("setAktivasiMember");
+        bootstrapMin.Modal.getInstance(modal).hide();
+        toastr.success("Member berhasil diaktivasi");
         GetMember();
       }).catch((error) => {
         console.log(error.response.data);
-      });
+        toastr.error(error.response.data.message.jumlah_bayar);
+      })
     }
-      onMounted(() => {
+
+    function setDeaktivasiMember(){
+      axios.patch(Api.BASE_URL + "/TransaksiDeaktivasi/" + member.id,{},{
+        headers: {
+              Accept: "application/json",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+      }).then((response) => {
+        console.log(response);
+        let modal = document.getElementById("setDeaktifModal");
+        bootstrapMin.Modal.getInstance(modal).hide();
+        toastr.success("Member berhasil dideaktivasi");
         GetMember();
-      });
-    
+      }).catch((error) => {
+        toastr.error(error.response.data.message);
+      })
+    }
+
+    onMounted(() => {
+      GetMember();
+    });
 
     return {
       members,
       Api,
       member,
       toastr,
+      search,
+      headers,
+      aktivasi,
       showData,
       resetPassword,
       OpenUpdateModal,
       openDeleteModal,
       updateMember,
       deleteMember,
+      setAktivasi,
+      setAktivasiMember,
+      setDeaktivasi,
+      setDeaktivasiMember,
     };
   },
 };
 </script>
 
 <style>
+@import "vue3-easy-data-table/dist/style.css";
+
 #btn-create-member {
   background: radial-gradient(
       650px circle at 0% 0%,
