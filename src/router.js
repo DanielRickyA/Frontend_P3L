@@ -103,6 +103,21 @@ const routes = [
         name: "StrukTransaksiView",
         component: () => import("@/views/Kasir/StrukTransaksi.vue"),
       },
+      {
+        path: "/PresensiMemberGym.index",
+        name: "PresensiMemberGymView",
+        component: () => import("@/views/Kasir/PresensiMemberView.vue"),
+      },
+      {
+        path: "/PresensiMemberKelas.index",
+        name: "PresensiMemberKelasView",
+        component: () => import("@/views/Kasir/PresensiKelasMember.vue"),
+      },
+      {
+        path: "/StrukPresensi.index",
+        name: "StrukPresensiView",
+        component: () => import("@/views/Kasir/StrukPresensi.vue"),
+      },
     ],
   },
 

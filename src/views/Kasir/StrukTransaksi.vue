@@ -4,7 +4,7 @@
   >
     <h1 class="h2">HISTORY TRANSAKSI MEMBER</h1>
   </div>
-  <div class="container">
+  <div class="container content">
     <div class="card">
       <div class="card-body">
         <div class="d-flex justify-content-between mb-2">
@@ -141,6 +141,9 @@
 .table_p0 td {
   padding: 0;
 }
+.content {
+  width: 75%;
+}
 
 @media print{
     .btn{
@@ -150,6 +153,13 @@
         box-shadow: none;
     }
 }
+
+@media(max-width: 750px){
+    .content{
+        width: 100%;
+    }
+}
+
 </style>
 
 <script>
@@ -186,7 +196,7 @@ export default {
           })
           .catch((error) => {
             console.log(error);
-            toastr.error(error.res);
+            toastr.error(error);
           });
       } else if (strukType == 2) {
         axios

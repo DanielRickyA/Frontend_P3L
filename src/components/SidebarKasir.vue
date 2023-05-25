@@ -26,7 +26,7 @@
           </li>
           <li >
             <router-link :to="{ name: 'DepoView' }"
-              ><span class="fa-solid fa-dumbbell mr-3"></span> Transaksi Deposit
+              ><span class="fa-solid fa-dollar-sign mr-3"></span> Transaksi Deposit
             </router-link>
           </li>
           <li >
@@ -44,14 +44,17 @@
               ><span class="fa-solid fa-calendar-check mr-3"></span> Transaksi Deposit Kelas
             </router-link>
           </li>
-          <li>
-            <a href="#"><span class="fa fa-cogs mr-3"></span> Services</a>
+          <li >
+            <router-link :to="{ name: 'PresensiMemberGymView' }"
+              ><span class="fa-solid fa-dumbbell mr-3"></span> Presensi Member Gym
+            </router-link>
           </li>
-          <li>
-            <a href="#"
-              ><span class="fa fa-paper-plane mr-3"></span> Contacts</a
-            >
+          <li >
+            <router-link :to="{ name: 'PresensiMemberKelasView' }"
+              ><span class="fa-solid fa-user-clock mr-3"></span> Presensi Member Kelas
+            </router-link>
           </li>
+          
         </ul>
 
          <form action="#" class="subscribe-form" @submit.prevent="logout1">
