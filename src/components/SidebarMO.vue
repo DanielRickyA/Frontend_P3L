@@ -34,14 +34,20 @@
               ><span class="fa-solid fa-envelope mr-3"></span> Perizinan Instruktur
             </router-link>
           </li>
-          <li>
-            <a href="#"><span class="fa fa-briefcase mr-3"></span> Works</a>
+          <li class="active">
+            <router-link :to="{ name: 'indexLaporanGymView' }"
+              ><span class="fa-solid fa-envelope mr-3"></span> laporan Gym
+            </router-link>
           </li>
-          <li>
-            <a href="#"><span class="fa fa-sticky-note mr-3"></span> Blog</a>
+          <li class="active">
+            <router-link :to="{ name: 'indexLaporanKelasView' }"
+              ><span class="fa-solid fa-envelope mr-3"></span> laporan Kelas
+            </router-link>
           </li>
-          <li>
-            <a href="#"><span class="fa fa-suitcase mr-3"></span> Gallery</a>
+          <li class="active">
+            <router-link :to="{ name: 'indexLaporanDanaPerbulanView' }"
+              ><span class="fa-solid fa-envelope mr-3"></span> laporan Data Perbulan
+            </router-link>
           </li>
           <li>
             <a href="#"><span class="fa fa-cogs mr-3"></span> Services</a>
