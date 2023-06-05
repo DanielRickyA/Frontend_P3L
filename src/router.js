@@ -74,6 +74,11 @@ const routes = [
         name: "indexLaporanDanaPerbulanView",
         component: () => import("@/views/MO/LaporanPendapatanPerbulan.vue"),
       },
+      {
+        path: "/LaporanKinerjaInstruktur.index",
+        name: "indexLaporanKinerjaInstrukturView",
+        component: () => import("@/views/MO/LaporanKinerjaInstruktur.vue"),
+      },
     ],
   },
 

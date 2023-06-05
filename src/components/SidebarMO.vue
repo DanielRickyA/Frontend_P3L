@@ -49,6 +49,11 @@
               ><span class="fa-solid fa-envelope mr-3"></span> laporan Data Perbulan
             </router-link>
           </li>
+          <li class="active">
+            <router-link :to="{ name: 'indexLaporanKinerjaInstrukturView' }"
+              ><span class="fa-solid fa-envelope mr-3"></span> laporan Kinerja Instruktur
+            </router-link>
+          </li>
           <li>
             <a href="#"><span class="fa fa-cogs mr-3"></span> Services</a>
           </li>
