@@ -32,6 +32,7 @@
               :search-value="search"
               :search-field="['f_pegawai.nama', 'f_member.nama', 'f_promo.nama', 'id', 'jumlah_depo', 'tanggal_depo', 'bonus', 'total_depo', 'sisa_saldo']"
               table-class="table table-striped table-bordered mt4"
+              :loading="loading"
             >
               <template #item-actions="depositUang">
                 <!-- Btn ShowByID -->
@@ -69,6 +70,7 @@ export default {
     EasyDataTable: Vue3EasyDataTable,
   },
   setup() {
+    const loading = ref(false);
     let depositUangS = ref([]);
     let depositUang = reactive({
       id: "",
@@ -112,6 +114,7 @@ export default {
 
   
     function GetTransaksiDepoUang() {
+      loading.value = true;
       axios
         .get(Api.BASE_URL + "/TransaksiDepositUang", {
           headers: {
@@ -120,10 +123,12 @@ export default {
           },
         })
         .then((response) => {
+          loading.value = false;
           depositUangS.value = response.data.data;
           console.log(response);
         })
         .catch((error) => {
+          loading.value = false;
           console.log(error.response.data);
         });
     }
@@ -151,6 +156,7 @@ export default {
       headers,
       useRouter,
       cetakStruk,
+      loading,
 
     };
   },

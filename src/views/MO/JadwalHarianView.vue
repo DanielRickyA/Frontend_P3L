@@ -37,7 +37,9 @@
               :search-value="search"
               :search-field="['f_jadwal_umum.id_kelas', 'f_instruktur.nama', 'f_jadwal_umum.f_kelas.nama', 'f_jadwal_umum.jam_kelas', 'tanggal_jadwal_harian', 'f_jadwal_umum.hari_kelas']"
               table-class="table table-striped table-bordered mt4"
+              :loading="loading"
             >
+            
               
             </EasyDataTable>
           </div>
@@ -75,7 +77,7 @@ export default {
       tanggal_transaksi: "",
       jenis_pembayaran: "",
     });
-
+    const loading = ref(false);
     let headers = ref([
       { text: "Tanggal Jadwal Harian", value: "tanggal_jadwal_harian", sortable: true },
       { text: "Nama Kelas", value: "f_jadwal_umum.f_kelas.nama", sortable: true },
@@ -87,6 +89,7 @@ export default {
     let search = ref("");
     const router = useRouter();
     function GetJadwalH() {
+      loading.value = true;
       axios
         .get(Api.BASE_URL + "/JadwalHarian", {
           headers: {
@@ -95,10 +98,12 @@ export default {
           },
         })
         .then((response) => {
+          loading.value = false;
           jadwalHarians.value = response.data.data;
           console.log(response);
         })
         .catch((error) => {
+          loading.value = false;
           console.log(error.response.data);
         });
     }
@@ -142,6 +147,7 @@ export default {
       GetJadwalH,
       generateJadwal,
       useRouter,
+      loading,
     };
   },
 };

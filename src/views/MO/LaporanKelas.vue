@@ -48,6 +48,11 @@
                 </tr>
               </tbody>
         </table>
+        <div class="d-flex justify-content-center mb-2  " v-if="loading">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden"></span>
+            </div>
+          </div>
       </div>
     </div>
     <div class="d-flex justify-content-end mt-2 " @click="cetak()">
@@ -92,6 +97,7 @@ export default {
             'November',
             'Desember',
         ]
+        const loading = ref(false);
 
         function setDefaultMonth() {
             const today = new Date();
@@ -101,6 +107,7 @@ export default {
         }
 
         function getData(){
+            loading.value = true;
             tahun.value = selectedMonth.value.substring(0, 4);
             bulan.value = daftarBulan[parseInt(selectedMonth.value.substring(5, 7)) - 1];
             tanggalCetak.value = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -117,8 +124,10 @@ export default {
                     total.value += response.data.data[i].jumlah_member;
                 }
                 console.log(response);
+                loading.value = false;
             }).catch((error) => {
                 toastr.error(error.response.data.message);
+                console.log(error.response);
             });
         }
         function cetak() {
@@ -139,6 +148,7 @@ export default {
             tanggalCetak,
             getData,
             cetak,
+            loading,
             
         }
     }

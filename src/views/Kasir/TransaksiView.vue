@@ -32,6 +32,7 @@
               :search-value="search"
               :search-field="['f_pegawai.nama', 'f_member.nama', 'jenis_pembayaran', 'tanggal_transaksi', 'id']"
               table-class="table table-striped table-bordered mt4"
+              :loading="loading"
             >
               <template #item-actions="aktivasi">
                 <!-- Btn ShowByID -->
@@ -72,6 +73,7 @@ export default {
     EasyDataTable: Vue3EasyDataTable,
   },
   setup() {
+    const loading = ref(false);
     let aktivasis = ref([]);
     let aktivasi = reactive({
       id: "",
@@ -102,6 +104,7 @@ export default {
     let search = ref("");
     const router = useRouter();
     function GetAktivasi() {
+      loading.value = true;
       axios
         .get(Api.BASE_URL + "/TransaksiAktivasi", {
           headers: {
@@ -111,9 +114,11 @@ export default {
         })
         .then((response) => {
           aktivasis.value = response.data.data;
+          loading.value = false;
           console.log(response);
         })
         .catch((error) => {
+          loading.value = false;
           console.log(error.response.data);
         });
     }
@@ -142,6 +147,7 @@ export default {
       cetakStruk,
       GetAktivasi,
       useRouter,
+      loading
     };
   },
 };

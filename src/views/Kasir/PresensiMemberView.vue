@@ -24,6 +24,7 @@
               :items="PresensiMembers"
               :headers="headers"
               :search-value="search"
+              :loading="loading"
             >
               <template #item-actions="PresensiMember">
                 <button
@@ -118,6 +119,7 @@ export default {
     });
     let router = useRouter()
     let search = ref("");
+    const loading = ref(false);
 
     let headers = ref([
       { text: "ID", value: "id", sortable: true },
@@ -139,6 +141,7 @@ export default {
     }
 
     function getPresensiGymMember() {
+      loading.value = true;
       axios
         .get(Api.BASE_URL + "/PresensiBookingGymToday", {
           headers: {
@@ -147,10 +150,12 @@ export default {
           },
         })
         .then((response) => {
+          loading.value = false;
           PresensiMembers.value = response.data.data;
           console.log(response);
         })
         .catch((error) => {
+          loading.value = false;
           console.log(error.response.data);
         });
     }
@@ -193,6 +198,7 @@ export default {
       presensiMember,
       setPresensiMember,
       cetakStruk,
+      loading,
     };
   },
 };

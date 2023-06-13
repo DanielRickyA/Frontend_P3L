@@ -5,7 +5,7 @@
         <button
           type="button"
           id="sidebarCollapse"
-          class="btn btn-primary"
+          class="btn btn-primary buttonku"
           @click="toggleSidebar"
         >
           <i class="fa fa-bars"></i>
@@ -115,6 +115,8 @@ button {
   transition: 0.3s all ease;
 }
 
+
+
 button:hover,
 button:focus {
   text-decoration: none !important;
@@ -173,12 +175,14 @@ h5,
 #sidebar {
   min-width: 270px;
   max-width: 270px;
+  /* background: #04255d; */
   background: radial-gradient(
       650px circle at 0% 0%,
       hsl(218, 41%, 35%) 15%,
       hsl(218, 41%, 30%) 35%,
       hsl(218, 41%, 20%) 75%,
       hsl(218, 41%, 19%) 80%,
+      hsl(218, 41%, 19%) 85%,
       transparent 100%
     ),
     radial-gradient(
@@ -187,6 +191,7 @@ h5,
       hsl(218, 41%, 30%) 35%,
       hsl(218, 41%, 20%) 75%,
       hsl(218, 41%, 19%) 80%,
+      hsl(218, 41%, 19%) 85%,
       transparent 100%
     );
   color: #fff;
@@ -353,13 +358,13 @@ a[data-toggle="collapse"] {
 }
 
 .btn.btn-primary {
-  background: #3445b4;
+  background-color: #04255d;
   border-color: #3445b4;
 }
 
 .btn.btn-primary:hover,
 .btn.btn-primary:focus {
-  background: #3445b4 !important;
+  background-color: #04255d !important;
   border-color: #3445b4 !important;
 }
 

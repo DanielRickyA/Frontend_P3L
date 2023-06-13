@@ -40,6 +40,18 @@
                 </tr>
               </tbody>
         </table>
+        <div class="d-flex justify-content-center mb-2 " v-if="loading">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden"></span>
+            </div>
+          </div>
+        <Bar
+            v-if="loading === false"
+            id="my-chart-id"
+            :options="chartOptions"
+            :data="chartData"
+          />
+          
       </div>
     </div>
     <div class="d-flex justify-content-end mt-2 " @click="cetak()">
@@ -52,17 +64,20 @@
 
 <script>
 // import axios from "axios";
-import { onMounted, ref } from "vue";
+import { reactive,onMounted, ref } from "vue";
 import * as Api from "../ApiHelper";
 import toastr from "toastr";
 import "toastr/build/toastr.min.css";
-
-
-
+import { Bar } from 'vue-chartjs'
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
 // import { useRouter } from 'vue-router'
 import axios from "axios";
 
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+
 export default {
+  name: 'BarChart',
+  components: { Bar },
     setup() {
         let Laporans = ref([]);
         let selectedMonth = ref('');
@@ -70,6 +85,45 @@ export default {
         const tahun = ref('')
         const bulan = ref('')
         const tanggalCetak = ref('')
+        let aktivasis = reactive(new Array(12).fill(0));
+        let deposits = reactive(new Array(12).fill(0));
+        let totals = reactive(new Array(12).fill(0));
+
+        let chartData = {
+                      labels:  [
+                      'Januari',
+                      'Februari',
+                      'Maret',
+                      'April',
+                      'Mei',
+                      'Juni',
+                      'Juli',
+                      'Agustus',
+                      'September',
+                      'Oktober',
+                      'November',
+                      'Desember',
+                  ],
+                        datasets: [
+                              {
+                                  label: 'Aktivasi',
+                                  backgroundColor: '#f87979',
+                                  data: aktivasis,
+                              },
+                              {
+                                  label: 'Deposit',
+                                  backgroundColor: '#7CFC00',
+                                  data: deposits,
+                              },
+                              {
+                                  label: 'Total',
+                                  backgroundColor: '#00FFFF',
+                                  data: totals,
+                              }
+                        ]
+                  };
+      
+  
         const daftarBulan = [
             'Januari',
             'Februari',
@@ -84,6 +138,7 @@ export default {
             'November',
             'Desember',
         ]
+        const loading = ref(true);
 
         function setDefaultMonth() {
             const today = new Date();
@@ -93,6 +148,7 @@ export default {
         }
 
         function getData(){
+            loading.value = true;
             tahun.value = selectedMonth.value.substring(0, 4);
             bulan.value = daftarBulan[parseInt(selectedMonth.value.substring(5, 7)) - 1];
             tanggalCetak.value = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -108,10 +164,36 @@ export default {
                 for (let i = 0; i < response.data.data.length; i++) {
                     total.value += response.data.data[i].jumlah_member;
                 }
-                
+
+
+
+                    aktivasis = Array.from({ length: 12 }, (_, index) => {
+                    const bulanData = response.data.data.find(data => data.Bulan === index + 1);
+                    return bulanData ? Number(bulanData.Aktivasi) : 0;
+                  });
+
+                  deposits = Array.from({ length: 12 }, (_, index) => {
+                    const bulanData = response.data.data.find(data => data.Bulan === index + 1);
+                    return bulanData ? Number(bulanData.Deposit) : 0;
+                  });
+
+                  totals = Array.from({ length: 12 }, (_, index) => {
+                    const bulanData = response.data.data.find(data => data.Bulan === index + 1);
+                    return bulanData ? Number(bulanData.Total) : 0;
+                  });
+
+                   chartData.datasets[0].data = aktivasis;
+                    chartData.datasets[1].data = deposits;
+                    chartData.datasets[2].data = totals;
+
+                  
+                console.log(aktivasis);
+
+                loading.value = false;
                 // console.log(response);
             }).catch((error) => {
                 toastr.error(error.response.data.message);
+                loading.value = false;
                 // console.log(error.response);
             });
         }
@@ -125,6 +207,7 @@ export default {
         })
 
         return {
+          aktivasis,
             selectedMonth,
             Laporans,
             total,
@@ -134,11 +217,16 @@ export default {
             daftarBulan,
             getData,
             cetak,
+            loading,
             options : {
               style: 'currency',
               currency: 'IDR',
               minimumFractionDigits: 0,
               maximumFractionDigits: 0,
+            },
+            chartData ,
+            chartOptions: {
+              responsive: true
             }
             
         }

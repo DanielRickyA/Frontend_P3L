@@ -24,6 +24,7 @@
               :items="PresensiKelasMembers"
               :headers="headers"
               :search-value="search"
+              :loading="loading"
             >
               <template #item-actions="PresensiKelasMember">
                 <button
@@ -60,6 +61,7 @@ export default {
   },
 
   setup() {
+    const loading = ref(false);
     let PresensiKelasMembers = ref([]);
     let PresensiKelasMember = reactive({
       id: "",
@@ -92,6 +94,7 @@ export default {
     ]);
 
     function getPresensiKelas() {
+      loading.value = true;
       axios
         .get(Api.BASE_URL + "/PresensiBookingKelasToday", {
           headers: {
@@ -100,10 +103,12 @@ export default {
           },
         })
         .then((response) => {
+          loading.value = false;
           PresensiKelasMembers.value = response.data.data;
           console.log(response);
         })
         .catch((error) => {
+          loading.value = false;
           console.log(error.response.data);
         });
     }
@@ -129,6 +134,7 @@ export default {
       search,
       headers,
       cetakStruk,
+      loading,
     };
   },
 };

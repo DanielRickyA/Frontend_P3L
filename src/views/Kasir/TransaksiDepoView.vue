@@ -31,6 +31,7 @@
               :headers="headers"
               :search-value="search"
               :search-field="['id', 'f_member.nama', 'nama', 'status', 'tanggal_expired', 'deposit_uang']"
+              :loading="loading"
               
             >
               <template #item-tanggal_expired="member">
@@ -450,6 +451,7 @@ export default {
     EasyDataTable: Vue3EasyDataTable,
   },
   setup() {
+    const loading = ref(false);
     let members = ref([]);
     let kelas = ref([]);
     let member = reactive({
@@ -566,6 +568,7 @@ export default {
       depositUang.jumlah_depo = '';
     }
     function GetMember() {
+      loading.value = true;
       axios
         .get(Api.BASE_URL + "/Member", {
           headers: {
@@ -574,11 +577,13 @@ export default {
           },
         })
         .then((response) => {
+          loading.value = false;
           members.value = response.data.data;
           console.log(response);
         })
         .catch((error) => {
           console.log(error.response.data);
+          loading.value = false;
         });
     }
 
@@ -726,6 +731,7 @@ export default {
       setAktivasiMember,
       setDeaktivasi,
       setDeaktivasiMember,
+      loading,
     };
   },
 };

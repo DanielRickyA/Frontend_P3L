@@ -48,6 +48,11 @@
                 </tr>
               </tbody>
         </table>
+          <div class="d-flex justify-content-center mb-2  " v-if="loading">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden"></span>
+            </div>
+          </div>
       </div>
     </div>
     <div class="d-flex justify-content-end mt-2 " @click="cetak()">
@@ -64,12 +69,8 @@ import { onMounted, ref } from "vue";
 import * as Api from "../ApiHelper";
 import toastr from "toastr";
 import "toastr/build/toastr.min.css";
-
-
-
 // import { useRouter } from 'vue-router'
 import axios from "axios";
-
 export default {
     setup() {
         let LaporanGyms = ref([]);
@@ -92,6 +93,7 @@ export default {
             'November',
             'Desember',
         ]
+        const loading = ref(false);
 
         function setDefaultMonth() {
             const today = new Date();
@@ -99,8 +101,8 @@ export default {
             const month = (today.getMonth() + 1).toString().padStart(2, '0');
             selectedMonth.value = `${year}-${month}`;
         }
-
         function getData(){
+            loading.value = true;
             tahun.value = selectedMonth.value.substring(0, 4);
             bulan.value = daftarBulan[parseInt(selectedMonth.value.substring(5, 7)) - 1];
             tanggalCetak.value = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -117,8 +119,10 @@ export default {
                     total.value += response.data.data[i].jumlah_member;
                 }
                 console.log(response);
+                loading.value = false;
             }).catch((error) => {
                 toastr.error(error.response.data.message);
+                console.log(error.response);
             });
         }
         function cetak() {
@@ -129,7 +133,6 @@ export default {
             setDefaultMonth();
             getData();
         })
-
         return {
             selectedMonth,
             LaporanGyms,
@@ -139,11 +142,11 @@ export default {
             tanggalCetak,
             getData,
             cetak,
+            loading,
             
         }
     }
 }
-
 </script>
 
 <style>
@@ -161,7 +164,6 @@ export default {
     display: none  !important;;
   }
 }
-
 @media (max-width: 990px) {
   .content {
     width: 100%;

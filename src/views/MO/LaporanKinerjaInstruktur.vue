@@ -29,6 +29,8 @@
             <p>Tanggal cetak: {{tanggalCetak}}</p>
           </div>
         </div>
+        
+        
 
         <table class="table table-striped table-bordered mt4">
               <thead class="thead-dark">
@@ -48,6 +50,14 @@
                 </tr>
               </tbody>
         </table>
+        <!-- loading -->
+         <div class="d-flex justify-content-center mb-2  " v-if="loading">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden"></span>
+            </div>
+          </div>
+
+         <BarChart :chartData="testData" />
       </div>
     </div>
     <div class="d-flex justify-content-end mt-2 " @click="cetak()">
@@ -56,6 +66,8 @@
       </button>
     </div>
   </div>
+
+  
 </template>
 
 <script>
@@ -65,6 +77,7 @@ import * as Api from "../ApiHelper";
 import toastr from "toastr";
 import "toastr/build/toastr.min.css";
 
+import { computed } from 'vue';
 
 
 // import { useRouter } from 'vue-router'
@@ -93,6 +106,8 @@ export default {
             'Desember',
         ]
 
+        const loading = ref(false);
+
         function setDefaultMonth() {
             const today = new Date();
             const year = today.getFullYear();
@@ -101,6 +116,7 @@ export default {
         }
 
         function getData(){
+            loading.value = true;
             tahun.value = selectedMonth.value.substring(0, 4);
             bulan.value = daftarBulan[parseInt(selectedMonth.value.substring(5, 7)) - 1];
             tanggalCetak.value = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -115,15 +131,37 @@ export default {
                 LaporanGyms.value = response.data.data;
                 for (let i = 0; i < response.data.data.length; i++) {
                     total.value += response.data.data[i].jumlah_member;
-                }
-                console.log(response);
+                  }
+                loading.value = false;
+                  console.log(response);
             }).catch((error) => {
+                loading.value = false;
                 toastr.error(error.response.data.message);
             });
         }
         function cetak() {
             window.print();
         }
+
+        const testData = computed(() => {
+        const labels = LaporanGyms.value.map((LaporanGym) => LaporanGym.nama);
+        const data = LaporanGyms.value.map(
+          (LaporanGym) => LaporanGym.jumlah_hadir
+        );
+
+        return {
+          labels,
+          datasets: [
+            {
+              label: "Jumlah Hadir",
+              backgroundColor: "rgba(75, 192, 192, 0.2)",
+              borderColor: "rgba(75, 192, 192, 1)",
+              borderWidth: 1,
+              data,
+            },
+          ],
+        };
+      });
         
         onMounted(async () => {
             setDefaultMonth();
@@ -139,6 +177,9 @@ export default {
             tanggalCetak,
             getData,
             cetak,
+            testData,
+            loading,
+            
             
         }
     }
@@ -153,6 +194,7 @@ export default {
 .content {
   width: 50%;
 }
+
 @media print {
   .btn {
     display: none;

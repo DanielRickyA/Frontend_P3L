@@ -32,6 +32,7 @@
               :search-value="search"
               :search-field="['f_pegawai.nama', 'f_member.nama', 'f_promo.nama', 'id', 'f_kelas.nama', 'tanggal_depo', 'total_depo', 'jumlah_pembayaran']"
               table-class="table table-striped table-bordered mt4"
+              :loading="loading"
             >
               <template #item-actions="depositKelas">
                 <!-- Cetak Struk -->
@@ -68,6 +69,7 @@ export default {
     EasyDataTable: Vue3EasyDataTable,
   },
   setup() {
+    const loading = ref(false);
     let depositKelasS = ref([]);
     let depositKelas = reactive({
       id: "",
@@ -114,6 +116,7 @@ export default {
     let router = useRouter();
 
     function GetTransaksiKelasUang() {
+      loading.value = true;
       axios
         .get(Api.BASE_URL + "/TransaksiDepositKelas", {
           headers: {
@@ -122,10 +125,12 @@ export default {
           },
         })
         .then((response) => {
+          loading.value = false;
           depositKelasS.value = response.data.data;
           console.log(response);
         })
         .catch((error) => {
+          loading.value = false;
           console.log(error.response.data);
         });
     }
@@ -153,6 +158,7 @@ export default {
       headers,
       useRouter,
       cetakStruk,
+      loading,
     };
   },
 };

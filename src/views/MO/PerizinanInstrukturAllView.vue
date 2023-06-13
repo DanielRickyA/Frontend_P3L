@@ -37,6 +37,7 @@
               :search-value="search"
               :search-field="['f_instruktur.nama']"
               table-class="table table-striped table-bordered mt4"
+              :loading="loading"
             >
               <template #item-status="perizinanInstrukturs">
                 <div v-if="perizinanInstrukturs.status == null">
@@ -129,6 +130,7 @@ export default {
     EasyDataTable: Vue3EasyDataTable,
   },
   setup() {
+    const loading = ref(false);
     let perizinanInstrukturs = ref([]);
     let perizinanInstruktur = reactive([
       {
@@ -165,6 +167,7 @@ export default {
     let search = ref("");
 
     function getPerizinan() {
+      loading.value = true;
       axios
         .get(Api.BASE_URL + "/getAllPerizinanInstruktur", {
           headers: {
@@ -173,11 +176,13 @@ export default {
           },
         })
         .then((response) => {
+          loading.value = false;
           perizinanInstrukturs.value = response.data.data;
 
           console.log(response);
         })
         .catch((error) => {
+          loading.value = false;
           console.log(error.response.data);
         });
     }
@@ -218,6 +223,7 @@ export default {
       getPerizinan,
       getInstruktur,
       useRouter,
+      loading,
 
     };
   },

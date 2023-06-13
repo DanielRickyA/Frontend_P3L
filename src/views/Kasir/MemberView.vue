@@ -34,6 +34,7 @@
               :items="members"
               :headers="headers"
               :search-value="search"
+              :loading="loading"
             >
              <!-- <template #item-status="member">
               <div v-if="member.status == 'Active'">
@@ -376,6 +377,7 @@ export default {
     ]);
 
     let search = ref("");
+    const loading = ref(false);
 
     // let router = useRouter()
     function showData(memberObj) {
@@ -403,6 +405,7 @@ export default {
 
    
     function GetMember() {
+      loading.value = true;
       axios
         .get(Api.BASE_URL + "/Member", {
           headers: {
@@ -411,11 +414,13 @@ export default {
           },
         })
         .then((response) => {
+          loading.value = false;
           members.value = response.data.data;
           console.log(response);
         })
         .catch((error) => {
           console.log(error.response.data);
+          loading.value = false;
         });
     }
 
@@ -504,6 +509,7 @@ export default {
       openDeleteModal,
       updateMember,
       deleteMember,
+      loading,
       
     };
   },

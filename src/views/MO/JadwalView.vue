@@ -58,6 +58,11 @@
                 </tr>
               </tbody>
             </table>
+            <div class="d-flex justify-content-center mb-2  " v-if="loading">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden"></span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -260,7 +265,7 @@ export default {
 
     const kelas = ref([]);
     const instruktur = ref([]);
-
+    const loading = ref(false);
     let jadwals = ref([]);
     let jadwal = reactive({
       id: "",
@@ -303,6 +308,7 @@ export default {
 
     // Get Jadwal UMUM 
     function getJadwalUmum() {
+      loading.value = true;
       axios
         .get(Api.BASE_URL + "/JadwalUmum", {
           headers: {
@@ -311,11 +317,13 @@ export default {
           },
         })
         .then((response) => {
+          loading.value = false;
           jadwals.value = response.data.data;
           console.log(response);
         })
         .catch((error) => {
           console.log(error.response.data);
+          loading.value = false;
         });
     }
 
@@ -426,6 +434,7 @@ export default {
       openDeleteModal,
       updateJadwal,
       deleteJadwal,
+      loading,
     };
   },
 };
