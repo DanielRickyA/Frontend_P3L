@@ -95,7 +95,7 @@
 
                 <!-- Submit button -->
                 <button type="submit" class="btn btn-primary btn-block mb-2 mt-3">
-                  Sign up
+                  Login
                 </button>
               </form>
             </div>

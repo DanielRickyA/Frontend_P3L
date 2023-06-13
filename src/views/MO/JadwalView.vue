@@ -35,7 +35,7 @@
                   <td class="text-center">
                     <!-- Btn Update -->
                     <button
-                      class="btn btn-sm btn-success me-1"
+                      class="btn btn-sm btn-success me-1 my-1"
                       data-bs-toggle="modal"
                       @click="OpenUpdateModal(jadwal)"
                       data-bs-target="#UpdateModal"
@@ -46,7 +46,7 @@
 
                     <!-- Btn Delete -->
                     <button
-                      class="btn btn-sm btn-danger me-1"
+                      class="btn btn-sm btn-danger me-1 my-1"
                       data-bs-toggle="modal"
                       data-bs-target="#DeleteModal"
                       @click="openDeleteModal(jadwal)"

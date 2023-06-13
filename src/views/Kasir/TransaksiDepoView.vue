@@ -44,48 +44,50 @@
               </template>
 
               <template #item-actions="member">
-                <button
-                  v-if="member.status == 'Inactive'"
-                  class="btn btn-sm btn-warning me-1"
-                  data-bs-toggle="modal"
-                  data-bs-target="#setAktifModal"
-                  @click="setAktivasi(member)"
-                >
-                  <i class="fa-solid fa-star"></i>
-                </button>
-                <button
-                  v-if="member.status == 'Active'"
-                  class="btn btn-sm btn-dark me-1"
-                  data-bs-toggle="modal"
-                  data-bs-target="#setDeaktifModal"
-                  @click="setDeaktivasi(member)"
-                >
-                  <i class="fa-solid fa-star"></i>
-                </button>
-                <!-- Btn Update -->
-                <button
-                  v-if="member.status == 'Active'"
-                  class="btn btn-sm btn-primary me-1"
-                  data-bs-toggle="modal"
-                  @click="setDepoUang(member)"
-                  data-bs-target="#openDepoUangModal"
-                >
-                <i class="fa-solid fa-wallet"></i>
-                  
-                </button>
-                <!--  -->
+                <div class="flex-wrap">
+                  <button
+                    v-if="member.status == 'Inactive'"
+                    class="btn btn-sm btn-warning me-1 my-1"
+                    data-bs-toggle="modal"
+                    data-bs-target="#setAktifModal"
+                    @click="setAktivasi(member)"
+                  >
+                    <i class="fa-solid fa-star"></i>
+                  </button>
+                  <button
+                    v-if="member.status == 'Active'"
+                    class="btn btn-sm btn-dark me-1 my-1"
+                    data-bs-toggle="modal"
+                    data-bs-target="#setDeaktifModal"
+                    @click="setDeaktivasi(member)"
+                  >
+                    <i class="fa-solid fa-star"></i>
+                  </button>
+                  <!-- Btn Update -->
+                  <button
+                    v-if="member.status == 'Active'"
+                    class="btn btn-sm btn-primary me-1 my-1"
+                    data-bs-toggle="modal"
+                    @click="setDepoUang(member)"
+                    data-bs-target="#openDepoUangModal"
+                  >
+                  <i class="fa-solid fa-wallet"></i>
+                    
+                  </button>
+                  <!--  -->
 
-                <!-- Tambah Depo Kelas -->
-                <button
-                  v-if="member.status == 'Active'"
-                  class="btn btn-sm btn-success me-1"
-                  data-bs-toggle="modal"
-                  @click="setDepoKelas(member)"
-                  data-bs-target="#openDepoKelasModal"
-                >
-                 <i class="fa-solid fa-calendar-check"></i>
-                </button>
-                <!--  -->
+                  <!-- Tambah Depo Kelas -->
+                  <button
+                    v-if="member.status == 'Active'"
+                    class="btn btn-sm btn-success me-1 my-1"
+                    data-bs-toggle="modal"
+                    @click="setDepoKelas(member)"
+                    data-bs-target="#openDepoKelasModal"
+                  >
+                  <i class="fa-solid fa-calendar-check"></i>
+                  </button>
+                  <!--  -->
+                </div>
               </template>
             </EasyDataTable>
           </div>

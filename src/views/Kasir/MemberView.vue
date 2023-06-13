@@ -55,36 +55,38 @@
             </template>
               <template #item-actions="member">
                 <!-- Btn ShowByID -->
-                <button
-                  class="btn btn-sm btn-primary me-1"
-                  data-bs-toggle="modal"
-                  @click="showData(member)"
-                  data-bs-target="#ShowIDMemberModal"
-                >
-                  <i class="fa-solid fa-eye"></i>
-                </button>
-                <!--  -->
+                <div class="flex-wrap">
+                  <button
+                    class="btn btn-sm btn-primary me-1 my-1"
+                    data-bs-toggle="modal"
+                    @click="showData(member)"
+                    data-bs-target="#ShowIDMemberModal"
+                  >
+                    <i class="fa-solid fa-eye"></i>
+                  </button>
+                  <!--  -->
 
-                <!-- Btn Update -->
-                <button
-                  class="btn btn-sm btn-success me-1"
-                  data-bs-toggle="modal"
-                  @click="OpenUpdateModal(member)"
-                  data-bs-target="#UpdateModal"
-                >
-                  <i class="fa-solid fa-pencil"></i>
-                </button>
-                <!--  -->
+                  <!-- Btn Update -->
+                  <button
+                    class="btn btn-sm btn-success me-1 my-1"
+                    data-bs-toggle="modal"
+                    @click="OpenUpdateModal(member)"
+                    data-bs-target="#UpdateModal"
+                  >
+                    <i class="fa-solid fa-pencil"></i>
+                  </button>
+                  <!--  -->
 
-                <!-- Btn Delete -->
-                <button
-                  class="btn btn-sm btn-danger me-1"
-                  data-bs-toggle="modal"
-                  data-bs-target="#DeleteModal"
-                  @click="openDeleteModal(member)"
-                >
-                  <i class="fa-solid fa-trash"></i>
-                </button>
+                  <!-- Btn Delete -->
+                  <button
+                    class="btn btn-sm btn-danger me-1 my-1"
+                    data-bs-toggle="modal"
+                    data-bs-target="#DeleteModal"
+                    @click="openDeleteModal(member)"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
 
                 
                 

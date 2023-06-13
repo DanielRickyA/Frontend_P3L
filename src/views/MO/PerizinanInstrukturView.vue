@@ -48,7 +48,7 @@
 
               <template #item-actions="perizinanInstrukturs">
                 <button
-                  class="btn btn-sm btn-success me-1"
+                  class="btn btn-sm btn-success me-1 my-1"
                   @click="btnKonfirmasi(perizinanInstrukturs)"
                   data-bs-toggle="modal"
                   data-bs-target="#setAktifModal"
@@ -57,7 +57,7 @@
                 </button>
 
                 <button
-                  class="btn btn-sm btn-danger me-1"
+                  class="btn btn-sm btn-danger me-1 my-1"
                   @click="btnKonfirmasi(perizinanInstrukturs)"
                   data-bs-toggle="modal"
                   data-bs-target="#setTolakIzin"
