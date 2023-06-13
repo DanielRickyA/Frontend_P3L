@@ -30,11 +30,40 @@
               :items="members"
               :headers="headers"
               :search-value="search"
+              :search-field="['id', 'f_member.nama', 'nama', 'status', 'tanggal_expired', 'deposit_uang']"
               
             >
+              <template #item-tanggal_expired="member">
+                <div v-if="member.tanggal_expired == null">
+                  <span class=" ">———————</span>
+                </div>
+                <div v-else>
+                  <span class=" ">{{ member.tanggal_expired }}</span>
+                </div>
+              </template>
+
               <template #item-actions="member">
+                <button
+                  v-if="member.status == 'Inactive'"
+                  class="btn btn-sm btn-warning me-1"
+                  data-bs-toggle="modal"
+                  data-bs-target="#setAktifModal"
+                  @click="setAktivasi(member)"
+                >
+                  <i class="fa-solid fa-star"></i>
+                </button>
+                <button
+                  v-if="member.status == 'Active'"
+                  class="btn btn-sm btn-dark me-1"
+                  data-bs-toggle="modal"
+                  data-bs-target="#setDeaktifModal"
+                  @click="setDeaktivasi(member)"
+                >
+                  <i class="fa-solid fa-star"></i>
+                </button>
                 <!-- Btn Update -->
                 <button
+                  v-if="member.status == 'Active'"
                   class="btn btn-sm btn-primary me-1"
                   data-bs-toggle="modal"
                   @click="setDepoUang(member)"
@@ -47,6 +76,7 @@
 
                 <!-- Tambah Depo Kelas -->
                 <button
+                  v-if="member.status == 'Active'"
                   class="btn btn-sm btn-success me-1"
                   data-bs-toggle="modal"
                   @click="setDepoKelas(member)"
@@ -119,22 +149,24 @@
               class="form-select"
               id="validationCustom04"
               v-model="depositKelas.id_promo"
+              disabled
             >
               <option value="3">Tidak Pakai Promo</option>
-              <option value="2">Promo Kelas Paket</option>
+              <option value="2" selected>Promo Kelas Paket</option>
             </select>
           </div>
 
           <div class="form-group mb-3">
             <label class="form-label">Total Depo</label>
-            <input
-              type="number"
-              class="form-control"
-              min="1"
+            <select
+              class="form-select"
               placeholder="Masukkan Jumlah Pembayaran"
               v-model="depositKelas.jumlah_depo"
               required
-            />
+            >
+              <option values="5">5</option>
+              <option values="10">10</option>
+            </select>
           </div>
 
           <div class="form-group mb-3">
@@ -235,7 +267,166 @@
       </Form>
     </div>
   </div>
+<!--  -->
+<!-- Modal Untuk Pemilihan Aktivasi -->
+  <div
+    class="modal fade"
+    id="setAktifModal"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">
+            Aktivasi Member {{ member.id }}
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-footer border-0">
+          <button
+            type="button"
+            class="btn"
+            data-bs-dismiss="modal"
+            
+          >
+            Batal
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-dismiss="modal"
+            data-bs-target="#setAktivasiMember"
+            data-bs-toggle="modal"
+            @click="setAktivasi(member)"
+          >
+            Aktivasi
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  -->
 
+  <!-- Modal Aktivasi  -->
+  <div
+    class="modal fade"
+    id="setAktivasiMember"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <form @submit.prevent="setAktivasiMember" class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">
+            Aktivasi Member
+          </h1>
+          <button
+            type="button"
+            class="btn-close btn-secondary"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group mb-3">
+            <label class="form-label" bis_skin_checked="1">ID Member</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Masukkan nama member"
+              v-model="member.id"
+              required
+              disabled
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" bis_skin_checked="1"
+              >Jumlah Pembayaran</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              placeholder="Masukkan Jumlah Pembayaran"
+              min="3000000"
+              v-model="aktivasi.jumlah_bayar"
+              required
+            />
+          </div>
+          <!-- make drop down -->
+          <div class="form-group mt-2">
+            <label for="validationCustom04" class="form-label">Metode Pembayaran</label>
+            <select class="form-select" id="validationCustom04" v-model="aktivasi.jenis_pembayaran" required>
+              <option selected disabled value="">Pilih Metode Pembayaran</option>
+              <option value="Cash">Cash</option>
+              <option value="Debit">Debit</option>
+              <option value="Transfer">Transfer</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!--  -->
+  <!-- Modal Deaktivasi -->
+  <!-- Modal Untuk Pemilihan Aktivasi -->
+  <div
+    class="modal fade"
+    id="setDeaktifModal"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <form @submit.prevent="setDeaktivasiMember" class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">
+            Deaktivasi Member
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary">Deaktivasi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!--  -->
 
 </template>
 
@@ -273,12 +464,21 @@ export default {
       password: "",
     });
 
+    let aktivasi = reactive({
+      id: "",
+      id_member: "",
+      id_pegawai: "",
+      tanggal_transaksi: "",
+      jumlah_bayar: "",
+      jenis_pembayaran: "",
+    });
+
     let depositKelas = reactive({
       id: "",
       id_pegawai: "",
       id_member: "",
       id_kelas: "",
-      id_promo: "3",
+      id_promo: "2",
       tanggal_depo: "",
       masa_berlaku: "",
       bonus: "",
@@ -307,7 +507,7 @@ export default {
       id: "",
       id_pegawai: "",
       id_member: "",
-      id_promo: "3",
+      id_promo: "1",
       tanggal_depo: "",
       masa_berlaku: "",
       bonus: "",
@@ -342,10 +542,21 @@ export default {
       member.id = memberObj.id;
 
       depositKelas.nama = '';
-      depositKelas.id_promo = '3';
+      depositKelas.id_promo = '2';
       depositKelas.id_kelas = '';
       depositKelas.jumlah_depo = '';
       depositKelas.jumlah_pembayaran = '';
+    }
+
+     function setAktivasi(memberObj) {
+      member.id = memberObj.id;
+
+      aktivasi.jumlah_bayar = "";
+      aktivasi.jenis_pembayaran = "";
+    }
+
+    function setDeaktivasi(memberObj) {
+      member.id = memberObj.id;
     }
 
     function setDepoUang(memberObj) {
@@ -386,6 +597,47 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    }
+    function setAktivasiMember() {
+      axios.post(Api.BASE_URL + "/TransaksiAktivasi",
+      {
+        id_member: member.id,
+        id_pegawai: localStorage.getItem("id"),
+        jumlah_bayar: aktivasi.jumlah_bayar,
+        jenis_pembayaran: aktivasi.jenis_pembayaran,
+      },{
+         headers: {
+              Accept: "application/json",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+      }).then((response) => {
+        console.log(response);
+        let modal = document.getElementById("setAktivasiMember");
+        bootstrapMin.Modal.getInstance(modal).hide();
+        toastr.success("Member berhasil diaktivasi");
+        GetMember();
+        router.push({ name: "AktivasiView" });
+      }).catch((error) => {
+        console.log(error.response.data);
+        toastr.error(error.response.data.message.jumlah_bayar);
+      })
+    }
+
+    function setDeaktivasiMember(){
+      axios.patch(Api.BASE_URL + "/TransaksiDeaktivasi/" + member.id,{},{
+        headers: {
+              Accept: "application/json",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+      }).then((response) => {
+        console.log(response);
+        let modal = document.getElementById("setDeaktifModal");
+        bootstrapMin.Modal.getInstance(modal).hide();
+        toastr.success("Member berhasil dideaktivasi");
+        GetMember();
+      }).catch((error) => {
+        toastr.error(error.response.data.message);
+      })
     }
 
     function tambahDepoKelas() {
@@ -460,6 +712,7 @@ export default {
       toastr,
       search,
       headers,
+      aktivasi,
       depositUang,
       depositKelas,
       useRouter,
@@ -469,6 +722,10 @@ export default {
       getKelas,
       tambahDepoKelas,
       tambahDepoUang,
+      setAktivasi,
+      setAktivasiMember,
+      setDeaktivasi,
+      setDeaktivasiMember,
     };
   },
 };

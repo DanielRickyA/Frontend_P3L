@@ -60,6 +60,11 @@ const routes = [
         component: () => import("@/views/MO/PerizinanInstrukturView.vue"),
       },
       {
+        path: "/PerizinanAllView.index",
+        name: "indexAllPerizinanView",
+        component: () => import("@/views/MO/PerizinanInstrukturAllView.vue"),
+      },
+      {
         path: "/LaporanGym.index",
         name: "indexLaporanGymView",
         component: () => import("@/views/MO/LaporanGym.vue"),

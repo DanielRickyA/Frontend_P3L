@@ -5,7 +5,7 @@
     <h1 class="h2">Laporan aktivitas Kelas bulanan</h1>
   </div>
 
-  <div class="container content">
+  <div class="container">
     <div class="card">
       <div class="card-body">
         <div class="d-flex justify-content-start mb-1">
@@ -34,9 +34,9 @@
               <tbody>
                 <tr v-for="(Laporan, id) in Laporans" :key="id">
                   <td>{{ daftarBulan[Laporan.Bulan-1]}}</td>
-                  <td>{{ Laporan.Aktivasi }}</td>
-                  <td>{{ Laporan.Deposit }}</td>
-                  <td>{{ Laporan.Total }}</td>
+                  <td>{{ Number(Laporan.Aktivasi).toLocaleString('id-ID', options) }}</td>
+                  <td>{{ Number(Laporan.Deposit).toLocaleString('id-ID', options) }}</td>
+                  <td>{{ Number(Laporan.Total).toLocaleString('id-ID', options) }}</td>
                 </tr>
               </tbody>
         </table>
@@ -134,6 +134,12 @@ export default {
             daftarBulan,
             getData,
             cetak,
+            options : {
+              style: 'currency',
+              currency: 'IDR',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }
             
         }
     }

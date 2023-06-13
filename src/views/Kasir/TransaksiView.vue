@@ -30,7 +30,7 @@
               :items="aktivasis"
               :headers="headers"
               :search-value="search"
-              :search-field="['f_pegawai.nama', 'f_member.nama']"
+              :search-field="['f_pegawai.nama', 'f_member.nama', 'jenis_pembayaran', 'tanggal_transaksi', 'id']"
               table-class="table table-striped table-bordered mt4"
             >
               <template #item-actions="aktivasi">

@@ -6,14 +6,13 @@
 <template>
   <div
     class="d-flex justify-content-between flex-wrap flex-mdnowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
-    
   >
-    <h1 class="h2">Perizinan Instruktur</h1>
+    <h1 class="h2">Perizinan Instruktur All Confirm</h1>
      <router-link
-      :to="{ name: 'indexAllPerizinanView' }"
+      :to="{ name: 'indexPerizinanView' }"
       class="btn btn-md"
       id="btn-create-member"
-      >List Instruktur dikonfirm</router-link
+      >List Izin Instruktur</router-link
     >
   </div>
   <div class="mt-5">
@@ -43,6 +42,12 @@
                 <div v-if="perizinanInstrukturs.status == null">
                   <span class=" ">———————</span>
                 </div>
+                <div v-if="perizinanInstrukturs.status == 1">
+                  <span class=" ">Diterima</span>
+                </div>
+                <div v-if="perizinanInstrukturs.status == 0">
+                  <span class=" ">Ditolak</span>
+                </div>
               </template>
 
               <template #item-actions="perizinanInstrukturs">
@@ -58,8 +63,6 @@
                 <button
                   class="btn btn-sm btn-danger me-1"
                   @click="btnKonfirmasi(perizinanInstrukturs)"
-                  data-bs-toggle="modal"
-                  data-bs-target="#setTolakIzin"
                 >
                   <i class="fa-solid fa-x"></i>
                 </button>
@@ -71,7 +74,7 @@
     </div>
   </div>
   <!--  -->
-  <!-- Konfirm Izin -->
+  <!--  -->
   <div
     class="modal fade"
     id="setAktifModal"
@@ -108,45 +111,6 @@
     </div>
   </div>
   <!--  -->
-
-    <!-- Tolak Izin -->
-  <div
-    class="modal fade"
-    id="setTolakIzin"
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    tabindex="-1"
-    aria-labelledby="staticBackdropLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered">
-      <form @submit.prevent="tolakIzin()" class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel">
-            Konfirmasi Ijin
-          </h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Close
-          </button>
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  <!--  -->
-
 </template>
 
 <script>
@@ -156,7 +120,7 @@ import * as Api from "../ApiHelper";
 import toastr from "toastr";
 import "toastr/build/toastr.min.css";
 import Vue3EasyDataTable from "vue3-easy-data-table";
-import bootstrapMin from "bootstrap/dist/js/bootstrap.min";
+
 
 import { useRouter } from "vue-router";
 
@@ -194,15 +158,15 @@ export default {
       { text: "Tanggal Izin", value: "tanggal_izin", sortable: true },
       { text: "Tanggal_buat_izin", value: "tanggal_buat_izin", sortable: true },
       { text: "Status", value: "status", sortable: true },
+      { text: "Tanggal Konfirmasi", value: "tanggal_konfirm", sortable: true },
       { text: "Keterangan", value: "keterangan", sortable: true },
-      { text: "Actions", value: "actions" },
     ]);
 
     let search = ref("");
 
     function getPerizinan() {
       axios
-        .get(Api.BASE_URL + "/PerizinanInstruktur", {
+        .get(Api.BASE_URL + "/getAllPerizinanInstruktur", {
           headers: {
             Accept: "application/json",
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -235,56 +199,6 @@ export default {
         });
     }
 
-    function btnKonfirmasi(objPerizinanInstruktur) {
-      perizinanInstruktur.id = objPerizinanInstruktur.id;
-    }
-
-    function konfirmIzin() {
-      axios.put(
-        Api.BASE_URL + "/PerizinanInstrukturK/" + perizinanInstruktur.id,
-        {
-          id_instruktur: instrukturPenampung.id,
-        },
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        }).then((response) => {
-          console.log(response);
-          toastr.success("Berhasil Konfirmasi Ijin");
-          let modal = document.getElementById("setAktifModal");
-          bootstrapMin.Modal.getInstance(modal).hide();
-          getPerizinan();
-        }).catch((error) => {
-          console.log(error);
-          toastr.error("Gagal Konfirmasi Ijin");
-        });
-    }
-
-    function tolakIzin(){
-      axios.put(
-        Api.BASE_URL + "/PerizinanInstrukturT/" + perizinanInstruktur.id,
-        {
-           id_instruktur: instrukturPenampung.id,
-        },
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        }).then((response) => {
-          console.log(response);
-          toastr.success("Ijin Ditolak");
-          let modal = document.getElementById("setTolakIzin");
-          bootstrapMin.Modal.getInstance(modal).hide();
-          getPerizinan();
-        }).catch((error) => {
-          console.log(error);
-          toastr.error("Gagal Konfirmasi Ijin");
-        });
-    }
-
     
 
     onMounted(() => {
@@ -304,9 +218,7 @@ export default {
       getPerizinan,
       getInstruktur,
       useRouter,
-      btnKonfirmasi,
-      konfirmIzin,
-      tolakIzin,
+
     };
   },
 };

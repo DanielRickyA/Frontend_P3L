@@ -22,11 +22,13 @@
                   >Nama Kelas</label
                 >
                 <select
-                  class="form-control"
+                  class="form-select"
                   placeholder="Masukkan nama member"
                   v-model="jadwal.id_kelas"
                   required
                 >
+                  <option hidden disabled selected value="">Pilih Kelas</option>
+
                   <option
                     v-for="kls in kelas"
                     :value="kls.id"
@@ -43,11 +45,15 @@
               <div class="form-group mb-3">
                 <label for="content" class="form-label">Nama Instruktur</label>
                 <select
-                  class="form-control"
+                  class="form-select"
                   placeholder="Masukkan nama Instruktur"
                   v-model="jadwal.id_instruktur"
                   required
                 >
+                  <option hidden disabled selected value="">
+                    Pilih Instruktur
+                  </option>
+
                   <option
                     v-for="ins in instruktur"
                     :value="ins.id"
@@ -67,13 +73,21 @@
 
               <div class="form-group mb-3">
                 <label for="content" class="form-label">Hari Kelas</label>
-                <input
-                  class="form-control"
-                  type="text"
+                <select
+                  class="form-select"
                   v-model="jadwal.hari_kelas"
                   placeholder="Masukkan Hari Kelas"
                   required
-                />
+                >
+                  <option hidden disabled selected value="">Pilih Hari</option>
+                  <option value="Monday">Monday</option>
+                  <option value="Tuesday">Tuesday</option>
+                  <option value="Wednesday">Wednesday</option>
+                  <option value="Thursday">Thursday</option>
+                  <option value="Friday">Friday</option>
+                  <option value="Saturday">Saturday</option>
+                  <option value="Sunday">Sunday</option>
+                </select>
                 <!-- validation -->
                 <div v-if="validation.alamat" class="mt-2 alert alert-danger">
                   {{ validation.hari_kelas[0] }}
@@ -81,13 +95,30 @@
               </div>
               <div class="form-group mb-3">
                 <label for="content" class="form-label">Jam Kelas</label>
-                <input
-                  class="form-control"
-                  type="text"
+                <select
+                  class="form-select"
                   v-model="jadwal.jam_kelas"
                   placeholder="Masukkan Jam Kelas"
                   required
-                />
+                >
+                  <option hidden disabled selected value="">
+                    Pilih Jam Kelas
+                  </option>
+                  <option value="07.00 - 08.00">07.00 - 08.00</option>
+                  <option value="08.00 - 09.00">08.00 - 09.00</option>
+                  <option value="09.00 - 10.00">09.00 - 10.00</option>
+                  <option value="10.00 - 11.00">10.00 - 11.00</option>
+                  <option value="11.00 - 12.00">11.00 - 12.00</option>
+                  <option value="12.00 - 13.00">12.00 - 13.00</option>
+                  <option value="13.00 - 14.00">13.00 - 14.00</option>
+                  <option value="14.00 - 15.00">14.00 - 15.00</option>
+                  <option value="15.00 - 16.00">15.00 - 16.00</option>
+                  <option value="16.00 - 17.00">16.00 - 17.00</option>
+                  <option value="17.00 - 18.00">17.00 - 18.00</option>
+                  <option value="18.00 - 19.00">18.00 - 19.00</option>
+                  <option value="19.00 - 20.00">19.00 - 20.00</option>
+                  <option value="20.00 - 21.00">20.00 - 21.00</option>
+                </select>
                 <!-- validation -->
                 <div v-if="validation.no_telp" class="mt-2 alert alert-danger">
                   {{ validation.jam_kelas[0] }}
@@ -126,7 +157,6 @@ export default {
         nama: "",
       },
     });
-    
 
     const kelas = ref([]);
     const instruktur = ref([]);
@@ -202,7 +232,7 @@ export default {
           toastr.error(error.response.data.message);
         });
     }
-  
+
     onMounted(() => {
       getKelas();
       getInstruktur();

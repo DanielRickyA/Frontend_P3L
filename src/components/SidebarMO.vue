@@ -36,31 +36,23 @@
           </li>
           <li class="active">
             <router-link :to="{ name: 'indexLaporanGymView' }"
-              ><span class="fa-solid fa-envelope mr-3"></span> laporan Gym
+              ><span class="fa-solid fa-chart-column mr-3"></span> Laporan Gym
             </router-link>
           </li>
           <li class="active">
             <router-link :to="{ name: 'indexLaporanKelasView' }"
-              ><span class="fa-solid fa-envelope mr-3"></span> laporan Kelas
+              ><span class="fa-solid fa-chart-gantt mr-3"></span> Laporan Kelas
             </router-link>
           </li>
           <li class="active">
             <router-link :to="{ name: 'indexLaporanDanaPerbulanView' }"
-              ><span class="fa-solid fa-envelope mr-3"></span> laporan Data Perbulan
+              ><span class="fa-solid fa-chart-line mr-3"></span> Laporan Data Perbulan
             </router-link>
           </li>
           <li class="active">
             <router-link :to="{ name: 'indexLaporanKinerjaInstrukturView' }"
-              ><span class="fa-solid fa-envelope mr-3"></span> laporan Kinerja Instruktur
+              ><span class="fa-solid fa-chart-pie mr-3"></span> Laporan Kinerja Instruktur
             </router-link>
-          </li>
-          <li>
-            <a href="#"><span class="fa fa-cogs mr-3"></span> Services</a>
-          </li>
-          <li>
-            <a href="#"
-              ><span class="fa fa-paper-plane mr-3"></span> Contacts</a
-            >
           </li>
         </ul>
 

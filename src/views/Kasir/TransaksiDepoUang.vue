@@ -30,7 +30,7 @@
               :items="depositUangS"
               :headers="headers"
               :search-value="search"
-              :search-field="['f_pegawai.nama', 'f_member.nama', 'f_promo.nama']"
+              :search-field="['f_pegawai.nama', 'f_member.nama', 'f_promo.nama', 'id', 'jumlah_depo', 'tanggal_depo', 'bonus', 'total_depo', 'sisa_saldo']"
               table-class="table table-striped table-bordered mt4"
             >
               <template #item-actions="depositUang">

@@ -30,6 +30,7 @@
               :items="depositKelasS"
               :headers="headers"
               :search-value="search"
+              :search-field="['f_pegawai.nama', 'f_member.nama', 'f_promo.nama', 'id', 'f_kelas.nama', 'tanggal_depo', 'total_depo', 'jumlah_pembayaran']"
               table-class="table table-striped table-bordered mt4"
             >
               <template #item-actions="depositKelas">
