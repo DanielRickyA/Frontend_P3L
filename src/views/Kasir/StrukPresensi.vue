@@ -5,11 +5,11 @@
     <h1 v-if="strukType == 2" class="h2">Cetak Struk Presensi Gym</h1>
     <h1 v-if="PresensiBooking.jenis_pembayaran == 'Deposit Kelas'" class="h2">Cetak Struk Presensi Kelas Paket</h1>
     <h1 v-if="PresensiBooking.jenis_pembayaran == 'Deposit Uang'" class="h2">Cetak Struk Presensi Kelas</h1>
-    <router-link
-      :to="{ name: 'PresensiMemberGymView' }"
+    <a
+       @click="$router.back()"
       class="btn btn-md btn-primary"
       id="btn-create-member"
-      >Back</router-link
+      >Back</a
     >
   </div>
   <div class="container content">

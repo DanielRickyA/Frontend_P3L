@@ -116,7 +116,7 @@ export default {
                 total.value = 0;
                 LaporanGyms.value = response.data.data;
                 for (let i = 0; i < response.data.data.length; i++) {
-                    total.value += response.data.data[i].jumlah_member;
+                    total.value += Number(response.data.data[i].jumlah_member);
                 }
                 console.log(response);
                 loading.value = false;
