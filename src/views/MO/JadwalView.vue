@@ -13,11 +13,12 @@
   <div class="mt-5">
     <div class="row">
       <div class="col-md-12">
-        <div class="card border-0 rounded shadow">
+        <div class="card border-0 rounded shadow " >
           <div class="card-body">
             <h3 style="text-align: left">Data Jadwal </h3>
-            <table class="table table-striped table-bordered mt4">
-              <thead class="thead-dark">
+            <div class="table-responsive overflow-y-scroll" style="max-height: 70vh">
+              <table class="table table-striped table-bordered mt4 ">
+                <thead class="thead-dark">
                 <tr class="text-dark table-secondary">
                   <th scope="col">Nama Kelas</th>
                   <th scope="col">Nama Instruktur</th>
@@ -39,25 +40,26 @@
                       data-bs-toggle="modal"
                       @click="OpenUpdateModal(jadwal)"
                       data-bs-target="#UpdateModal"
-                    >
+                      >
                       <i class="fa-solid fa-pencil"></i>
                     </button>
                     <!--  -->
 
                     <!-- Btn Delete -->
                     <button
-                      class="btn btn-sm btn-danger me-1 my-1"
-                      data-bs-toggle="modal"
-                      data-bs-target="#DeleteModal"
-                      @click="openDeleteModal(jadwal)"
+                    class="btn btn-sm btn-danger me-1 my-1"
+                    data-bs-toggle="modal"
+                    data-bs-target="#DeleteModal"
+                    @click="openDeleteModal(jadwal)"
                     >
-                      <i class="fa-solid fa-trash"></i>
-                    </button>
-                    <!--  -->
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                  <!--  -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
             <div class="d-flex justify-content-center mb-2  " v-if="loading">
               <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden"></span>
