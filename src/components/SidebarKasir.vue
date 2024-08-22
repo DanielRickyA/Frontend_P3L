@@ -19,61 +19,63 @@
           >
         </h1>
         <ul class="list-unstyled components mb-5">
-          <li >
+          <li>
             <router-link :to="{ name: 'indexMemberView' }"
               ><span class="fa fa-user mr-3"></span> Member
             </router-link>
           </li>
-          <li >
+          <li>
             <router-link :to="{ name: 'DepoView' }"
-              ><span class="fa-solid fa-dollar-sign mr-3"></span> Transaksi Deposit
+              ><span class="fa-solid fa-dollar-sign mr-3"></span> Transaksi
+              Deposit
             </router-link>
           </li>
-          <li >
+          <li>
             <router-link :to="{ name: 'AktivasiView' }"
               ><span class="fa-solid fa-star mr-3"></span> Transaksi Aktivasi
             </router-link>
           </li>
-          <li >
+          <li>
             <router-link :to="{ name: 'DepoUangView' }"
-              ><span class="fa-solid fa-wallet mr-3"></span> Transaksi Deposit Uang
+              ><span class="fa-solid fa-wallet mr-3"></span> Transaksi Deposit
+              Uang
             </router-link>
           </li>
-          <li >
+          <li>
             <router-link :to="{ name: 'DepoKelasView' }"
-              ><span class="fa-solid fa-calendar-check mr-3"></span> Transaksi Deposit Kelas
+              ><span class="fa-solid fa-calendar-check mr-3"></span> Transaksi
+              Deposit Kelas
             </router-link>
           </li>
-          <li >
+          <li>
             <router-link :to="{ name: 'PresensiMemberGymView' }"
-              ><span class="fa-solid fa-dumbbell mr-3"></span> Presensi Member Gym
+              ><span class="fa-solid fa-dumbbell mr-3"></span> Presensi Member
+              Gym
             </router-link>
           </li>
-          <li >
+          <li>
             <router-link :to="{ name: 'PresensiMemberKelasView' }"
-              ><span class="fa-solid fa-user-clock mr-3"></span> Presensi Member Kelas
+              ><span class="fa-solid fa-user-clock mr-3"></span> Presensi Member
+              Kelas
             </router-link>
           </li>
-          
         </ul>
 
-         <form action="#" class="subscribe-form" @submit.prevent="logout1">
-            <div class="form-group d-flex justify-content-center">
-              <!-- <RouterLink :to="{ name: 'Login' }"> -->
-                <button
-                  type="text"
-                  id="btnLogout"
-                  class="form-control btn btn-lg w-100"
-                  placeholder="Logout"
-                >
-                  Logout <i class="fa-solid fa-right-from-bracket"></i>
-              </button>
-              <!-- </RouterLink> -->
-            </div>
-          </form>
-        <div class="footer">
-
-        </div>
+        <form action="#" class="subscribe-form" @submit.prevent="logout1">
+          <div class="form-group d-flex justify-content-center">
+            <!-- <RouterLink :to="{ name: 'Login' }"> -->
+            <button
+              type="text"
+              id="btnLogout"
+              class="form-control btn btn-lg w-100"
+              placeholder="Logout"
+            >
+              Logout <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+            <!-- </RouterLink> -->
+          </div>
+        </form>
+        <div class="footer"></div>
       </div>
     </nav>
 
@@ -402,7 +404,7 @@ a[data-toggle="collapse"] {
   background: #3d5283;
 }
 
-#btnLogout{
+#btnLogout {
   width: 100%;
 }
 </style>
@@ -414,7 +416,6 @@ import * as Api from "../views/ApiHelper";
 import { onMounted } from "vue";
 
 export default {
-
   setup() {
     onMounted(() => {
       if (localStorage.getItem("role") != "Kasir") {
@@ -422,7 +423,7 @@ export default {
       }
     });
 
-     function logout() {
+    function logout() {
       axios
         .post(
           Api.BASE_URL + "/LogoutPegawai",
@@ -444,7 +445,6 @@ export default {
           console.log(error);
         });
     }
-
   },
 
   methods: {
@@ -473,13 +473,12 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-    }
-   
+    },
   },
   components: { RouterLink },
 
-  return:{
+  return: {
     onMounted,
-  }
+  },
 };
 </script>

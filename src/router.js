@@ -1,30 +1,5 @@
 //import vue router
 import { createRouter, createWebHistory } from 'vue-router'
-//define a routes
-// const routes = [
-//   {
-//     path: "/",
-//     name: "Login",
-//     component: () => import("@/views/LoginPegawai.vue"),
-//     // children: [
-//     //   {
-//     //     path: "/MemberView.index",
-//     //     name: "indexMemberView",
-//     //     component: () => import("@/views/Kasir/MemberView.vue"),
-//     //   },
-//     //   // {
-//     //   //   path: "/departemen/create",
-//     //   //   name: "departemen.create",
-//     //   //   component: () => import("@/views/Departemen/createPage.vue"),
-//     //   // },
-//     // ],
-//   },
-//   {
-//     path: "/MemberView.index",
-//     name: "indexMemberView",
-//     component: () => import("@/views/Kasir/MemberView.vue"),
-//   },
-// ];
 
 const routes = [
   {

@@ -172,6 +172,13 @@
   .btn {
     display: none;
   }
+  .card {
+    border: none;
+    box-shadow: none;
+  }
+  .content {
+    width: 100%;
+  }
   
 }
 
